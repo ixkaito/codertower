@@ -8,8 +8,8 @@ window.onload = function() {
   game.onload = function() {
 
     var player = new Sprite(32, 32);
-    player.x = 0;
-    player.y = 0;
+    player.x = (this.width - 32) / 2;
+    player.y = (this.height - 32) / 2;
     var playerImage = new Surface(192, 128);
     playerImage.draw(game.assets['./assets/images/knight.png'], 96, 0, 192, 128, 0, 0, 192, 128);
     player.image = playerImage;
