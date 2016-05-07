@@ -7,7 +7,8 @@ window.onload = function() {
   game.preload('./assets/images/map.png', './assets/images/knight.png', './assets/images/green-slime.png');
   game.onload = function() {
 
-    var map = new Map(16, 16);
+    var mapGrid = 16;
+    var map = new Map(mapGrid, mapGrid);
     map.image = game.assets['./assets/images/map.png'];
     map.loadData([
       [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
@@ -53,8 +54,10 @@ window.onload = function() {
       [ -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23, -1, 23,],
     ]);
 
-    var player = new Sprite(32, 32);
-    player.x = 8;
+    var playerWidth  = 32;
+    var playerHeight = 32;
+    var player = new Sprite(playerWidth, playerHeight);
+    player.x = mapGrid / 2;
     player.y = 0;
     var playerImage = new Surface(192, 128);
     playerImage.draw(game.assets['./assets/images/knight.png'], 96, 0, 192, 128, 0, 0, 192, 128);
@@ -94,10 +97,10 @@ window.onload = function() {
         if (this.vx || this.vy) {
           var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
           var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
-          // if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
-          //   this.isMoving = true;
-          //   arguments.callee.call(this);
-          // }
+          if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+            this.isMoving = true;
+            arguments.callee.call(this);
+          }
         }
       }
     });
