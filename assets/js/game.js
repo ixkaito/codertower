@@ -88,15 +88,16 @@ window.onload = function() {
     player.isMoving = false;
     player.direction = 0;
     player.walk = 1;
+    player.walkFrames = 3;
     player.speed = 4;
     player.on('enterframe', function() {
       this.frame = this.direction * 6 + this.walk;
       if (this.isMoving) {
         this.moveBy(this.vx, this.vy);
 
-        if (!(game.frame % 3)) {
+        if (!(game.frame % player.walkFrames)) {
           this.walk++;
-          this.walk %= 3;
+          this.walk %= player.walkFrames;
         }
         if ((this.vx && (this.x - 8) % 16 == 0) || (this.vy && this.y % 16 == 0)) {
           this.isMoving = false;
