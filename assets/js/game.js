@@ -99,7 +99,7 @@ window.onload = function() {
           this.walk++;
           this.walk %= player.walkFrames;
         }
-        if ((this.vx && (this.x - 8) % 16 == 0) || (this.vy && this.y % 16 == 0)) {
+        if ((this.vx && (this.x - (mapGrid / 2)) % mapGrid == 0) || (this.vy && this.y % mapGrid == 0)) {
           this.isMoving = false;
           this.walk = 1;
         }
