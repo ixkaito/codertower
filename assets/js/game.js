@@ -159,6 +159,11 @@ window.onload = function() {
 
     game.rootScene.addChild(stage1);
 
+    var pad = new Pad();
+    pad.x = 0;
+    pad.y = 320;
+    game.rootScene.addChild(pad);
+
   };
 
   game.start();
