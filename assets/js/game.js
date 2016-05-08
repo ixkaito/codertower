@@ -117,8 +117,8 @@ window.onload = function() {
           this.vy = 4;
         }
         if (this.vx || this.vy) {
-          var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * mapGrid : 0) + mapGrid;
-          var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * mapGrid : 0) + mapGrid;
+          var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (playerWidth / 2) : 0) + (playerWidth / 2);
+          var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (playerHeight / 2) : 0) + (playerHeight / 2);
           if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
             this.isMoving = true;
             arguments.callee.call(this);
