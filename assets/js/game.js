@@ -90,6 +90,7 @@ window.onload = function() {
     player.walk = 1;
     player.walkFrames = 3;
     player.speed = 4;
+
     player.on('enterframe', function() {
       this.frame = this.direction * 6 + this.walk;
       if (this.isMoving) {
@@ -129,9 +130,33 @@ window.onload = function() {
       }
     });
 
+    var GreenSlime = Class.create(Sprite, {
+      initialize: function(x, y) {
+        Sprite.call(this, 32, 32);
+        var slimeImage = new Surface(96, 128);
+        slimeImage.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
+        this.image = slimeImage;
+
+        this.x = x;
+        this.y = y;
+        this.isMoving = false;
+        this.direction = 0;
+        this.walk = 1;
+        this.walkFrames = 3;
+        this.speed = 4;
+
+        this.on('enterframe', function() {
+          this.frame = this.direction * 3 + this.walk;
+        });
+
+        stage1.addChild(this);
+      }
+    });
+
     var stage1 = new Group();
     stage1.addChild(map);
     stage1.addChild(player);
+
     game.rootScene.addChild(stage1);
 
   };
