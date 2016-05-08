@@ -79,12 +79,12 @@ window.onload = function() {
     var playerWidth  = 32;
     var playerHeight = 32;
     var player = new Sprite(playerWidth, playerHeight);
-    player.x = (map.width - playerWidth - mapGrid) / 2;
-    player.y = (map.height - playerHeight) / 2;
     var playerImage = new Surface(192, 128);
     playerImage.draw(game.assets['./assets/images/knight.png'], 96, 0, 192, 128, 0, 0, 192, 128);
     player.image = playerImage;
 
+    player.x = (map.width - playerWidth - mapGrid) / 2;
+    player.y = (map.height - playerHeight) / 2;
     player.isMoving = false;
     player.direction = 0;
     player.walk = 1;
