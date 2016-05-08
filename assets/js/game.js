@@ -2,7 +2,7 @@ enchant();
 
 window.onload = function() {
 
-  var game = new Core(window.innerWidth, window.innerHeight);
+  var game = new Core(320, 420);
   game.fps = 15;
   game.preload('./assets/images/map.png', './assets/images/knight.png', './assets/images/green-slime.png');
   game.onload = function() {
