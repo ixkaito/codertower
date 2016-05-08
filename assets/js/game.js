@@ -88,6 +88,7 @@ window.onload = function() {
     player.isMoving = false;
     player.direction = 0;
     player.walk = 1;
+    player.speed = 4;
     player.on('enterframe', function() {
       this.frame = this.direction * 6 + this.walk;
       if (this.isMoving) {
@@ -105,16 +106,16 @@ window.onload = function() {
         this.vx = this.vy = 0;
         if (game.input.left) {
           this.direction = 1;
-          this.vx = -4;
+          this.vx = - player.speed;
         } else if (game.input.right) {
           this.direction = 2;
-          this.vx = 4;
+          this.vx = player.speed;
         } else if (game.input.up) {
           this.direction = 3;
-          this.vy = -4;
+          this.vy = - player.speed;
         } else if (game.input.down) {
           this.direction = 4;
-          this.vy = 4;
+          this.vy = player.speed;
         }
         if (this.vx || this.vy) {
           var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (playerWidth / 2) : 0) + (playerWidth / 2);
