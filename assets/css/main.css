@@ -1,0 +1,17 @@
+body {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+a {
+	display: inline-block;
+	color: #fff;
+	background: #0080ff;
+	padding: 0.5em 1em;
+	border-radius: 6px;
+	text-decoration: none;
+}
+#enchant-stage {
+	width: 320px;
+	margin: auto;
+}
