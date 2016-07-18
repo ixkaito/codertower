@@ -130,15 +130,21 @@ window.onload = function() {
       }
     });
 
-    var GreenSlime = Class.create(Sprite, {
-      initialize: function(x, y) {
+    /**
+     * Green slime class
+     * @param  {int} x Initial x coordinate on the stage.
+     *
+     * @param  {int} y Initial y coordinate on the stage.
+     */
+    var greenSlime = Class.create(Sprite, {
+      initialize: function(xGrid, yGrid) {
         Sprite.call(this, 32, 32);
         var slimeImage = new Surface(96, 128);
         slimeImage.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
         this.image = slimeImage;
 
-        this.x = x;
-        this.y = y;
+        this.x = mapGrid * (xGrid - 0.5);
+        this.y = mapGrid * (yGrid - 1);
         this.isMoving = false;
         this.direction = 0;
         this.walk = 1;
@@ -153,12 +159,33 @@ window.onload = function() {
       }
     });
 
+    /**
+     * Add map and player
+     */
     var stage1 = new Group();
     stage1.addChild(map);
     stage1.addChild(player);
 
+    /**
+     * Add green slimes
+     */
+    stage1.addChild(new greenSlime(1, 1));
+    stage1.addChild(new greenSlime(6, 5));
+    stage1.addChild(new greenSlime(10, 1));
+    stage1.addChild(new greenSlime(7, 12));
+    stage1.addChild(new greenSlime(3, 14));
+    stage1.addChild(new greenSlime(8, 5));
+    stage1.addChild(new greenSlime(18, 1));
+    stage1.addChild(new greenSlime(18, 18));
+
+    /**
+     * Add stage 1
+     */
     game.rootScene.addChild(stage1);
 
+    /**
+     * Add game pad
+     */
     var pad = new Pad();
     pad.x = 0;
     pad.y = 320;
