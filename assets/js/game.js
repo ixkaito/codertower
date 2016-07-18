@@ -170,11 +170,11 @@ window.onload = function() {
      * Add green slimes
      */
     stage1.addChild(new greenSlime(1, 1));
+    stage1.addChild(new greenSlime(2, 16));
     stage1.addChild(new greenSlime(6, 5));
-    stage1.addChild(new greenSlime(10, 1));
     stage1.addChild(new greenSlime(7, 12));
-    stage1.addChild(new greenSlime(3, 14));
-    stage1.addChild(new greenSlime(8, 5));
+    stage1.addChild(new greenSlime(13, 6));
+    stage1.addChild(new greenSlime(15, 12));
     stage1.addChild(new greenSlime(18, 1));
     stage1.addChild(new greenSlime(18, 18));
 
