@@ -131,34 +131,6 @@ window.onload = function() {
     });
 
     /**
-     * Green slime class
-     * @param  {int} xGrid  Horizontal grid on the stage. Minimal 1 to max 18.
-     * @param  {int} yGrid  Vertical grid on the stage. Minimal 1 to max 18.
-     */
-    var greenSlime = Class.create(Sprite, {
-      initialize: function(xGrid, yGrid) {
-        Sprite.call(this, 32, 32);
-        var slimeImage = new Surface(96, 128);
-        slimeImage.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
-        this.image = slimeImage;
-
-        this.x = mapGrid * (xGrid - 0.5);
-        this.y = mapGrid * (yGrid - 1);
-        this.isMoving = false;
-        this.direction = 0;
-        this.walk = 1;
-        this.walkFrames = 3;
-        this.speed = 4;
-
-        this.on('enterframe', function() {
-          this.frame = this.direction * 3 + this.walk;
-        });
-
-        stage1.addChild(this);
-      }
-    });
-
-    /**
      * Add map and player
      */
     var stage1 = new Group();
@@ -166,16 +138,52 @@ window.onload = function() {
     stage1.addChild(player);
 
     /**
+     * Green slime class
+     * @param  {int} xGrid  Horizontal grid on the stage. Minimal 1 to max 18.
+     * @param  {int} yGrid  Vertical grid on the stage. Minimal 1 to max 18.
+     */
+    var greenSlime = Class.create(Sprite, {
+      initialize: function(xGrid, yGrid) {
+        var w = 32;
+        var h = 32;
+        Sprite.call(this, w, h);
+        var slimeImage = new Surface(96, 128);
+        slimeImage.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
+        this.image = slimeImage;
+
+        this.x = mapGrid * (xGrid - 0.5);
+        this.y = mapGrid * (yGrid - 1);
+
+        var x = this.x + (w / 2);
+        var y = this.y + (h / 2);
+
+        if (!map.hitTest(x, y)) {
+          this.isMoving = false;
+          this.direction = 0;
+          this.walk = 1;
+          this.walkFrames = 3;
+          this.speed = 4;
+
+          this.on('enterframe', function() {
+            this.frame = this.direction * 3 + this.walk;
+          });
+
+          stage1.addChild(this);
+        }
+      }
+    });
+
+    /**
      * Add green slimes
      */
-    stage1.addChild(new greenSlime(1, 1));
-    stage1.addChild(new greenSlime(2, 16));
-    stage1.addChild(new greenSlime(6, 5));
-    stage1.addChild(new greenSlime(7, 12));
-    stage1.addChild(new greenSlime(13, 6));
-    stage1.addChild(new greenSlime(15, 12));
-    stage1.addChild(new greenSlime(18, 1));
-    stage1.addChild(new greenSlime(18, 18));
+    new greenSlime(1, 1);
+    new greenSlime(2, 16);
+    new greenSlime(6, 5);
+    new greenSlime(7, 12);
+    new greenSlime(13, 6);
+    new greenSlime(15, 12);
+    new greenSlime(18, 1);
+    new greenSlime(18, 19);
 
     /**
      * Add stage 1
