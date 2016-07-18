@@ -1,5 +1,5 @@
-# The Tower of Coder
+# CoderTower（コーダーの塔）
 
-## GitHub Page
+![screenshot](https://cloud.githubusercontent.com/assets/5457539/16915129/076e8b3e-4d31-11e6-9c2d-06161995511f.png)
 
-[http://ixkaito.github.io/the-tower-of-coder](http://ixkaito.github.io/the-tower-of-coder)
+https://ixkaito.github.io/codertower
