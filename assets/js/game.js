@@ -143,47 +143,51 @@ window.onload = function() {
      * @param  {int} yGrid  Vertical grid on the stage. Minimal 1 to max 18.
      */
     var greenSlime = Class.create(Sprite, {
-      initialize: function(xGrid, yGrid) {
-        var w = 32;
-        var h = 32;
-        Sprite.call(this, w, h);
+      initialize: function(x, y) {
+        this.w = 32;
+        this.h = 32;
+        Sprite.call(this, this.w, this.h);
         var slimeImage = new Surface(96, 128);
         slimeImage.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
         this.image = slimeImage;
 
-        this.x = mapGrid * (xGrid - 0.5);
-        this.y = mapGrid * (yGrid - 1);
+        this.x = x;
+        this.y = y;
+        this.isMoving = false;
+        this.direction = 0;
+        this.walk = 1;
+        this.walkFrames = 3;
+        this.speed = 4;
 
-        var x = this.x + (w / 2);
-        var y = this.y + (h / 2);
+        this.on('enterframe', function() {
+          this.frame = this.direction * 3 + this.walk;
+        });
 
-        if (!map.hitTest(x, y)) {
-          this.isMoving = false;
-          this.direction = 0;
-          this.walk = 1;
-          this.walkFrames = 3;
-          this.speed = 4;
-
-          this.on('enterframe', function() {
-            this.frame = this.direction * 3 + this.walk;
-          });
-
-          stage1.addChild(this);
-        }
+        // stage1.addChild(this);
       }
     });
 
-    /**
-     * Add green slimes
-     */
-    new greenSlime(1, 1);
-    new greenSlime(2, 16);
-    new greenSlime(6, 5);
-    new greenSlime(7, 12);
-    new greenSlime(13, 6);
-    new greenSlime(15, 12);
-    new greenSlime(18, 1);
-    new greenSlime(18, 19);
+    function randomAddEnermies(enermy, num) {
+
+      var i = 0;
+      var randXGrid, randYGrid, x, y;
+      var e = new enermy();
+
+      while (i < num) {
+        randXGrid = Math.floor((Math.random() * 18) + 1); ;
+        randYGrid = Math.floor((Math.random() * 18) + 1); ;
+
+        x = mapGrid * (randXGrid - 0.5);
+        y = mapGrid * (randYGrid - 1);
+
+        if (!map.hitTest(x + e.w / 2, y + e.h / 2)) {
+          stage1.addChild(new enermy(x, y));
+          i++;
+        }
+      }
+    }
+
+    randomAddEnermies(greenSlime, 8);
 
     /**
      * Add stage 1
