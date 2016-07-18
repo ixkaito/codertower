@@ -132,9 +132,8 @@ window.onload = function() {
 
     /**
      * Green slime class
-     * @param  {int} x Initial x coordinate on the stage.
-     *
-     * @param  {int} y Initial y coordinate on the stage.
+     * @param  {int} xGrid  Horizontal grid on the stage. Minimal 1 to max 18.
+     * @param  {int} yGrid  Vertical grid on the stage. Minimal 1 to max 18.
      */
     var greenSlime = Class.create(Sprite, {
       initialize: function(xGrid, yGrid) {
