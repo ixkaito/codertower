@@ -7,135 +7,93 @@ window.onload = function() {
   game.preload('./assets/images/map.png', './assets/images/knight.png', './assets/images/green-slime.png');
   game.onload = function() {
 
-    var mapGrid = 16;
-    var map = new Map(mapGrid, mapGrid);
-    map.image = game.assets['./assets/images/map.png'];
-    map.loadData([
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-      [ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,],
-    ],[
-      [  7, 23, 23, 23, 23, 23, 23, 23, 23,  7, 23, 23, 23, 23, 23, 23, 23, 23, 23,  7,],
-      [  7, -1, -1, -1, -1, -1, -1, -1, -1,  7, -1, -1, -1, -1, -1, -1, -1, -1, -1,  7,],
-      [  7, -1, 23,  7, 23, -1, 23,  7, -1, 23, -1, 23,  7, 23, 23, 23, 23, 23, 23,  7,],
-      [  7, -1, -1,  7, -1, -1, -1,  7, -1, -1, -1, -1,  7, -1, -1, -1, -1, -1, -1,  7,],
-      [  7, -1,  7, 23, 23,  7, 23, 23, 23,  7, 23, -1, 23, 23,  7, 23, 23, 23, -1,  7,],
-      [  7, -1,  7, -1, -1,  7, -1, -1, -1, 23, -1, -1, -1, -1, 23, -1, -1, -1, -1,  7,],
-      [  7, -1, 23,  7, -1, 23, -1,  7, -1, -1, -1, 23,  7, -1, -1, -1,  7, -1, 23,  7,],
-      [  7, -1, -1,  7, -1, -1, -1, 23, 23, 23,  7, -1,  7, 23, 23, 23, 23, -1, -1,  7,],
-      [  7, 23, -1, 23, 23,  7, -1, -1, -1, -1,  7, -1, 23, -1, -1, -1, -1, -1, 23,  7,],
-      [  7, -1, -1, -1, -1,  7, 23,  7, 23, -1, 23, -1, -1, -1,  7, 23,  7, -1, -1,  7,],
-      [  7, -1,  7, 23, -1,  7, -1,  7, -1, -1, -1, 23,  7, -1, 23, -1,  7, 23,  7,  7,],
-      [  7, -1,  7, -1, -1,  7, -1, 23, 23,  7, -1, -1,  7, -1, -1, -1, 23, -1, 23,  7,],
-      [  7, -1, 23,  7, -1,  7, -1, -1, -1,  7, 23, -1, 23, 23,  7, -1, -1, -1, -1,  7,],
-      [  7, -1, -1, 23, 23, 23, -1,  7, -1,  7, -1, -1, -1, -1, 23,  7, -1,  7, -1,  7,],
-      [  7, 23, -1, -1, -1, -1, -1,  7, -1, 23,  7, -1,  7, -1, -1,  7, -1,  7, -1,  7,],
-      [  7, -1, -1,  7, -1, 23, 23, 23, -1, -1, 23, 23,  7, 23, -1, 23, 23, 23, 23,  7,],
-      [  7, 23, -1,  7, -1, -1, -1, -1,  7, -1, -1, -1, 23, -1, -1, -1, -1, -1, -1,  7,],
-      [  7, -1, -1, 23, 23,  7, 23, -1, 23,  7, 23, -1, -1, -1, 23,  7, -1,  7, -1,  7,],
-      [  7,  7, -1, -1, -1,  7, -1, -1, -1,  7, -1, -1,  7, -1, -1,  7, -1,  7, -1,  7,],
-      [ 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,],
-    ]);
-    map.collisionData = [
-      [  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,],
-      [  1,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,],
-      [  1,  0,  1,  1,  1,  0,  1,  1,  0,  1,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,],
-      [  1,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  1,],
-      [  1,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1,  1,  1,  1,  0,  1,],
-      [  1,  0,  1,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  1,  0,  0,  0,  0,  1,],
-      [  1,  0,  1,  1,  0,  1,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0,  1,  0,  1,  1,],
-      [  1,  0,  0,  1,  0,  0,  0,  1,  1,  1,  1,  0,  1,  1,  1,  1,  1,  0,  0,  1,],
-      [  1,  1,  0,  1,  1,  1,  0,  0,  0,  0,  1,  0,  1,  0,  0,  0,  0,  0,  1,  1,],
-      [  1,  0,  0,  0,  0,  1,  1,  1,  1,  0,  1,  0,  0,  0,  1,  1,  1,  0,  0,  1,],
-      [  1,  0,  1,  1,  0,  1,  0,  1,  0,  0,  0,  1,  1,  0,  1,  0,  1,  1,  1,  1,],
-      [  1,  0,  1,  0,  0,  1,  0,  1,  1,  1,  0,  0,  1,  0,  0,  0,  1,  0,  1,  1,],
-      [  1,  0,  1,  1,  0,  1,  0,  0,  0,  1,  1,  0,  1,  1,  1,  0,  0,  0,  0,  1,],
-      [  1,  0,  0,  1,  1,  1,  0,  1,  0,  1,  0,  0,  0,  0,  1,  1,  0,  1,  0,  1,],
-      [  1,  1,  0,  0,  0,  0,  0,  1,  0,  1,  1,  0,  1,  0,  0,  1,  0,  1,  0,  1,],
-      [  1,  0,  0,  1,  0,  1,  1,  1,  0,  0,  1,  1,  1,  1,  0,  1,  1,  1,  1,  1,],
-      [  1,  1,  0,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  1,],
-      [  1,  0,  0,  1,  1,  1,  1,  0,  1,  1,  1,  0,  0,  0,  1,  1,  0,  1,  0,  1,],
-      [  1,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  1,  0,  0,  1,  0,  1,  0,  1,],
-      [  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,],
-    ];
-
-    var playerWidth  = 32;
-    var playerHeight = 32;
-    var player = new Sprite(playerWidth, playerHeight);
-    var playerImage = new Surface(192, 128);
-    playerImage.draw(game.assets['./assets/images/knight.png'], 96, 0, 192, 128, 0, 0, 192, 128);
-    player.image = playerImage;
-
-    player.x = (map.width - playerWidth - mapGrid) / 2;
-    player.y = (map.height - playerHeight) / 2;
-    player.isMoving = false;
-    player.direction = 0;
-    player.walk = 1;
-    player.walkFrames = 3;
-    player.speed = 4;
-
-    player.on('enterframe', function() {
-      this.frame = this.direction * 6 + this.walk;
-      if (this.isMoving) {
-        this.moveBy(this.vx, this.vy);
-
-        if (!(game.frame % player.walkFrames)) {
-          this.walk++;
-          this.walk %= player.walkFrames;
+    /**
+     * Map class
+     * @param  {Object} stage
+     * @param  {Object} mapData
+     */
+    var map = Class.create(Map, {
+      initialize: function(stage, mapData) {
+        this.grid = {
+          width: 16,
+          height: 16,
         }
-        if ((this.vx && (this.x - (mapGrid / 2)) % mapGrid == 0) || (this.vy && this.y % mapGrid == 0)) {
-          this.isMoving = false;
-          this.walk = 1;
-        }
-      } else {
-        this.vx = this.vy = 0;
-        if (game.input.left) {
-          this.direction = 1;
-          this.vx = - player.speed;
-        } else if (game.input.right) {
-          this.direction = 2;
-          this.vx = player.speed;
-        } else if (game.input.up) {
-          this.direction = 3;
-          this.vy = - player.speed;
-        } else if (game.input.down) {
-          this.direction = 4;
-          this.vy = player.speed;
-        }
-        if (this.vx || this.vy) {
-          var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (playerWidth / 2) : 0) + (playerWidth / 2);
-          var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (playerHeight / 2) : 0) + (playerHeight / 2);
-          if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
-            this.isMoving = true;
-            arguments.callee.call(this);
-          }
-        }
+        Map.call(this, this.grid.width, this.grid.height);
+
+        this.image = game.assets['./assets/images/map.png'];
+        this.loadData(mapData.loadData[0], mapData.loadData[1]);
+        this.collisionData = mapData.collisionData;
+
+        stage.addChild(this);
       }
     });
 
     /**
-     * Add map and player
+     * Player class
+     * @param  {Object} stage
+     * @param  {Object} map
      */
-    var stage1 = new Group();
-    stage1.addChild(map);
-    stage1.addChild(player);
+    var player = Class.create(Sprite, {
+      initialize: function(stage, map) {
+        this.w = 32;
+        this.h = 32;
+        Sprite.call(this, this.w, this.h);
+
+        var image = new Surface(192, 128);
+        image.draw(game.assets['./assets/images/knight.png'], 96, 0, 192, 128, 0, 0, 192, 128);
+        this.image = image;
+
+        this.x = (map.width - this.w - map.grid.width) / 2;
+        this.y = (map.height - this.h) / 2;
+        this.isMoving = false;
+        this.direction = 0;
+        this.walk = 1;
+        this.walkFrames = 3;
+        this.speed = 4;
+
+        this.on('enterframe', function() {
+          this.frame = this.direction * 6 + this.walk;
+          if (this.isMoving) {
+            this.moveBy(this.vx, this.vy);
+
+            if (!(game.frame % this.walkFrames)) {
+              this.walk++;
+              this.walk %= this.walkFrames;
+            }
+            if ((this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) || (this.vy && this.y % map.grid.height == 0)) {
+              this.isMoving = false;
+              this.walk = 1;
+            }
+          } else {
+            this.vx = this.vy = 0;
+            if (game.input.left) {
+              this.direction = 1;
+              this.vx = - this.speed;
+            } else if (game.input.right) {
+              this.direction = 2;
+              this.vx = this.speed;
+            } else if (game.input.up) {
+              this.direction = 3;
+              this.vy = - this.speed;
+            } else if (game.input.down) {
+              this.direction = 4;
+              this.vy = this.speed;
+            }
+            if (this.vx || this.vy) {
+              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.w / 2) : 0) + (this.w / 2);
+              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.h / 2) : 0) + (this.h / 2);
+              if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+                this.isMoving = true;
+                arguments.callee.call(this);
+              }
+            }
+          }
+        });
+
+        stage.addChild(this);
+
+      }
+    });
 
     /**
      * Green slime class
@@ -143,51 +101,42 @@ window.onload = function() {
      * @param  {int} yGrid  Vertical grid on the stage. Minimal 1 to max 18.
      */
     var greenSlime = Class.create(Sprite, {
-      initialize: function(xGrid, yGrid) {
-        var w = 32;
-        var h = 32;
-        Sprite.call(this, w, h);
-        var slimeImage = new Surface(96, 128);
-        slimeImage.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
-        this.image = slimeImage;
+      initialize: function(stage, map, xGrid, yGrid) {
+        this.w = 32;
+        this.h = 32;
+        Sprite.call(this, this.w, this.h);
 
-        this.x = mapGrid * (xGrid - 0.5);
-        this.y = mapGrid * (yGrid - 1);
+        var image = new Surface(96, 128);
+        image.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
+        this.image = image;
 
-        var x = this.x + (w / 2);
-        var y = this.y + (h / 2);
+        this.x = map.grid.width * (xGrid - 0.5);
+        this.y = map.grid.height * (yGrid - 1);
+
+        var x = this.x + (this.w / 2);
+        var y = this.y + (this.h / 2);
 
         if (!map.hitTest(x, y)) {
-          this.isMoving = false;
-          this.direction = 0;
-          this.walk = 1;
-          this.walkFrames = 3;
-          this.speed = 4;
-
-          this.on('enterframe', function() {
-            this.frame = this.direction * 3 + this.walk;
-          });
-
-          stage1.addChild(this);
+          stage.addChild(this);
         }
       }
     });
 
     /**
-     * Add green slimes
+     * Stage 1
      */
-    new greenSlime(1, 1);
-    new greenSlime(2, 16);
-    new greenSlime(6, 5);
-    new greenSlime(7, 12);
-    new greenSlime(13, 6);
-    new greenSlime(15, 12);
-    new greenSlime(18, 1);
-    new greenSlime(18, 19);
+    var stage1 = new Group();
+    var map1 = new map(stage1, mapData1);
+    var player1 = new player(stage1, map1);
+    new greenSlime(stage1, map1, 1, 1);
+    new greenSlime(stage1, map1, 2, 16);
+    new greenSlime(stage1, map1, 6, 5);
+    new greenSlime(stage1, map1, 7, 12);
+    new greenSlime(stage1, map1, 13, 6);
+    new greenSlime(stage1, map1, 15, 12);
+    new greenSlime(stage1, map1, 18, 1);
+    new greenSlime(stage1, map1, 18, 18);
 
-    /**
-     * Add stage 1
-     */
     game.rootScene.addChild(stage1);
 
     /**
