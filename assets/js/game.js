@@ -45,6 +45,7 @@ window.onload = function() {
           width: 192,
           height: 128,
         };
+        this.surface.column = this.surface.width / this.width;
         this.surface.clip = {
           x: 96,
           y: 0,
@@ -73,16 +74,18 @@ window.onload = function() {
         this.image = surface;
 
         // move
-        this.x = (map.width - this.width - map.grid.width) / 2;
-        this.y = (map.height - this.height) / 2;
         this.isMoving = false;
         this.direction = 0;
+        this.left = 1;
+        this.right = 2;
+        this.up = 3;
+        this.down = 4;
         this.walk = 1;
         this.walkFrames = 3;
         this.speed = 4;
 
         this.on('enterframe', function() {
-          this.frame = this.direction * 6 + this.walk;
+          this.frame = this.direction * this.surface.column + this.walk;
           if (this.isMoving) {
             this.moveBy(this.vx, this.vy);
 
@@ -97,16 +100,16 @@ window.onload = function() {
           } else {
             this.vx = this.vy = 0;
             if (game.input.left) {
-              this.direction = 1;
+              this.direction = this.left;
               this.vx = - this.speed;
             } else if (game.input.right) {
-              this.direction = 2;
+              this.direction = this.right;
               this.vx = this.speed;
             } else if (game.input.up) {
-              this.direction = 3;
+              this.direction = this.up;
               this.vy = - this.speed;
             } else if (game.input.down) {
-              this.direction = 4;
+              this.direction = this.down;
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
@@ -120,6 +123,9 @@ window.onload = function() {
           }
         });
 
+        // position
+        this.x = (map.width - this.width - map.grid.width) / 2;
+        this.y = (map.height - this.height) / 2;
         stage.addChild(this);
 
       }
@@ -136,28 +142,53 @@ window.onload = function() {
         this.height = 32;
         Sprite.call(this, this.width, this.height);
 
-        var image = new Surface(96, 128);
-        image.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
-        this.image = image;
-
-        this.x = map.grid.width * (xGrid - 0.5);
-        this.y = map.grid.height * (yGrid - 1);
-
-        var x = this.x + (this.width / 2);
-        var y = this.y + (this.height / 2);
-
-        if (!map.hitTest(x, y)) {
-          stage.addChild(this);
+        // image
+        this.surface = {
+          image: game.assets['./assets/images/green-slime.png'],
+          width: 96,
+          height: 128,
+        };
+        this.surface.column = this.surface.width / this.width;
+        this.surface.clip = {
+          x: 0,
+          y: 0,
+          width: this.surface.width,
+          height: this.surface.height,
+        };
+        this.surface.position = {
+          x: 0,
+          y: 0,
+          width: this.surface.width,
+          height: this.surface.height,
         }
 
+        var surface = new Surface(this.surface.width, this.surface.height);
+        surface.draw(
+          this.surface.image,
+          this.surface.clip.x,
+          this.surface.clip.y,
+          this.surface.clip.width,
+          this.surface.clip.height,
+          this.surface.position.x,
+          this.surface.position.y,
+          this.surface.position.width,
+          this.surface.position.height
+        );
+        this.image = surface;
+
+        // move
         this.isMoving = false;
         this.direction = 0;
+        this.left = 1;
+        this.right = 2;
+        this.up = 3;
+        this.down = 4;
         this.walk = 1;
         this.walkFrames = 3;
         this.speed = 4;
 
         this.on('enterframe', function() {
-          this.frame = this.direction * 3 + this.walk;
+          this.frame = this.direction * this.surface.column + this.walk;
           if (this.isMoving) {
             this.moveBy(this.vx, this.vy);
 
@@ -172,13 +203,13 @@ window.onload = function() {
           } else {
             this.vx = this.vy = 0;
             this.direction = Math.floor(Math.random() * 4 + 1);
-            if (this.direction == 1) { // left
+            if (this.direction == this.left) {
               this.vx = - this.speed;
-            } else if (this.direction == 2) { // right
+            } else if (this.direction == this.right) {
               this.vx = this.speed;
-            } else if (this.direction == 3) { // up
+            } else if (this.direction == this.up) {
               this.vy = - this.speed;
-            } else if (this.direction == 4) { // down
+            } else if (this.direction == this.down) {
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
@@ -191,6 +222,17 @@ window.onload = function() {
             }
           }
         });
+
+        // position
+        this.x = map.grid.width * (xGrid - 0.5);
+        this.y = map.grid.height * (yGrid - 1);
+
+        var x = this.x + (this.width / 2);
+        var y = this.y + (this.height / 2);
+
+        if (!map.hitTest(x, y)) {
+          stage.addChild(this);
+        }
       }
     });
 
