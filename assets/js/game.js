@@ -28,16 +28,19 @@ window.onload = function() {
       }
     });
 
+    var Character = Class.create(Sprite, {
+        defaultWidth: 32,
+        defaultHeight: 32,
+    });
+
     /**
      * Player class
      * @param  {Object} stage
      * @param  {Object} map
      */
-    var player = Class.create(Sprite, {
+    var Player = Class.create(Character, {
       initialize: function(stage, map) {
-        this.width = 32;
-        this.height = 32;
-        Sprite.call(this, this.width, this.height);
+        Sprite.call(this, this.defaultWidth, this.defaultHeight);
 
         // image
         this.surface = {
@@ -260,7 +263,7 @@ window.onload = function() {
       new greenSlime(stage1, map1, 18, 1),
       new greenSlime(stage1, map1, 18, 18),
     ];
-    var player1 = new player(stage1, map1);
+    var player1 = new Player(stage1, map1);
 
     game.rootScene.addChild(stage1);
 
