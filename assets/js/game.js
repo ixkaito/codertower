@@ -35,16 +35,16 @@ window.onload = function() {
      */
     var player = Class.create(Sprite, {
       initialize: function(stage, map) {
-        this.w = 32;
-        this.h = 32;
-        Sprite.call(this, this.w, this.h);
+        this.width = 32;
+        this.height = 32;
+        Sprite.call(this, this.width, this.height);
 
         var image = new Surface(192, 128);
         image.draw(game.assets['./assets/images/knight.png'], 96, 0, 192, 128, 0, 0, 192, 128);
         this.image = image;
 
-        this.x = (map.width - this.w - map.grid.width) / 2;
-        this.y = (map.height - this.h) / 2;
+        this.x = (map.width - this.width - map.grid.width) / 2;
+        this.y = (map.height - this.height) / 2;
         this.isMoving = false;
         this.direction = 0;
         this.walk = 1;
@@ -80,8 +80,8 @@ window.onload = function() {
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
-              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.w / 2) : 0) + (this.w / 2);
-              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.h / 2) : 0) + (this.h / 2);
+              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0) + (this.width / 2);
+              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0) + (this.height / 2);
               if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
                 this.isMoving = true;
                 arguments.callee.call(this);
@@ -102,9 +102,9 @@ window.onload = function() {
      */
     var greenSlime = Class.create(Sprite, {
       initialize: function(stage, map, xGrid, yGrid) {
-        this.w = 32;
-        this.h = 32;
-        Sprite.call(this, this.w, this.h);
+        this.width = 32;
+        this.height = 32;
+        Sprite.call(this, this.width, this.height);
 
         var image = new Surface(96, 128);
         image.draw(game.assets['./assets/images/green-slime.png'], 0, 0, 96, 128, 0, 0, 96, 128);
@@ -113,8 +113,8 @@ window.onload = function() {
         this.x = map.grid.width * (xGrid - 0.5);
         this.y = map.grid.height * (yGrid - 1);
 
-        var x = this.x + (this.w / 2);
-        var y = this.y + (this.h / 2);
+        var x = this.x + (this.width / 2);
+        var y = this.y + (this.height / 2);
 
         if (!map.hitTest(x, y)) {
           stage.addChild(this);
@@ -152,8 +152,8 @@ window.onload = function() {
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
-              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.w / 2) : 0) + (this.w / 2);
-              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.h / 2) : 0) + (this.h / 2);
+              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0) + (this.width / 2);
+              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0) + (this.height / 2);
               if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
                 this.isMoving = true;
                 arguments.callee.call(this);
