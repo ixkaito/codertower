@@ -93,7 +93,11 @@ window.onload = function() {
               this.walk++;
               this.walk %= this.walkFrames;
             }
-            if ((this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) || (this.vy && this.y % map.grid.height == 0)) {
+
+            if (
+              (this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) ||
+              (this.vy && this.y % map.grid.height == 0)
+            ) {
               this.isMoving = false;
               this.walk = 1;
             }
@@ -113,8 +117,8 @@ window.onload = function() {
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
-              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0) + (this.width / 2);
-              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0) + (this.height / 2);
+              var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
+              var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
               if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
                 this.isMoving = true;
                 arguments.callee.call(this);
@@ -196,7 +200,11 @@ window.onload = function() {
               this.walk++;
               this.walk %= this.walkFrames;
             }
-            if ((this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) || (this.vy && this.y % map.grid.height == 0)) {
+
+            if (
+              (this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) ||
+              (this.vy && this.y % map.grid.height == 0)
+            ) {
               this.isMoving = false;
               this.walk = 1;
             }
@@ -213,9 +221,10 @@ window.onload = function() {
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
-              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0) + (this.width / 2);
-              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0) + (this.height / 2);
-              if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+              var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
+              var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
+              if (
+                0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
                 this.isMoving = true;
                 arguments.callee.call(this);
               }
