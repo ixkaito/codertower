@@ -39,10 +39,40 @@ window.onload = function() {
         this.height = 32;
         Sprite.call(this, this.width, this.height);
 
-        var image = new Surface(192, 128);
-        image.draw(game.assets['./assets/images/knight.png'], 96, 0, 192, 128, 0, 0, 192, 128);
-        this.image = image;
+        // image
+        this.surface = {
+          image: game.assets['./assets/images/knight.png'],
+          width: 192,
+          height: 128,
+        };
+        this.surface.clip = {
+          x: 96,
+          y: 0,
+          width: this.surface.width,
+          height: this.surface.height,
+        };
+        this.surface.position = {
+          x: 0,
+          y: 0,
+          width: this.surface.width,
+          height: this.surface.height,
+        }
 
+        var surface = new Surface(this.surface.width, this.surface.height);
+        surface.draw(
+          this.surface.image,
+          this.surface.clip.x,
+          this.surface.clip.y,
+          this.surface.clip.width,
+          this.surface.clip.height,
+          this.surface.position.x,
+          this.surface.position.y,
+          this.surface.position.width,
+          this.surface.position.height
+        );
+        this.image = surface;
+
+        // move
         this.x = (map.width - this.width - map.grid.width) / 2;
         this.y = (map.height - this.height) / 2;
         this.isMoving = false;
