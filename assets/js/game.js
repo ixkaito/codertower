@@ -119,6 +119,48 @@ window.onload = function() {
         if (!map.hitTest(x, y)) {
           stage.addChild(this);
         }
+
+        this.isMoving = false;
+        this.direction = 0;
+        this.walk = 1;
+        this.walkFrames = 3;
+        this.speed = 4;
+
+        this.on('enterframe', function() {
+          this.frame = this.direction * 3 + this.walk;
+          if (this.isMoving) {
+            this.moveBy(this.vx, this.vy);
+
+            if (!(game.frame % this.walkFrames)) {
+              this.walk++;
+              this.walk %= this.walkFrames;
+            }
+            if ((this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) || (this.vy && this.y % map.grid.height == 0)) {
+              this.isMoving = false;
+              this.walk = 1;
+            }
+          } else {
+            this.vx = this.vy = 0;
+            this.direction = Math.floor(Math.random() * 4 + 1);
+            if (this.direction == 1) { // left
+              this.vx = - this.speed;
+            } else if (this.direction == 2) { // right
+              this.vx = this.speed;
+            } else if (this.direction == 3) { // up
+              this.vy = - this.speed;
+            } else if (this.direction == 4) { // down
+              this.vy = this.speed;
+            }
+            if (this.vx || this.vy) {
+              var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * (this.w / 2) : 0) + (this.w / 2);
+              var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * (this.h / 2) : 0) + (this.h / 2);
+              if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+                this.isMoving = true;
+                arguments.callee.call(this);
+              }
+            }
+          }
+        });
       }
     });
 
@@ -127,7 +169,6 @@ window.onload = function() {
      */
     var stage1 = new Group();
     var map1 = new map(stage1, mapData1);
-    var player1 = new player(stage1, map1);
     var greenSlimes = [
       new greenSlime(stage1, map1, 1, 1),
       new greenSlime(stage1, map1, 2, 16),
@@ -138,6 +179,7 @@ window.onload = function() {
       new greenSlime(stage1, map1, 18, 1),
       new greenSlime(stage1, map1, 18, 18),
     ];
+    var player1 = new player(stage1, map1);
 
     game.rootScene.addChild(stage1);
 
