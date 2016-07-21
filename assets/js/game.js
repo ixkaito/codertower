@@ -128,14 +128,16 @@ window.onload = function() {
     var stage1 = new Group();
     var map1 = new map(stage1, mapData1);
     var player1 = new player(stage1, map1);
-    new greenSlime(stage1, map1, 1, 1);
-    new greenSlime(stage1, map1, 2, 16);
-    new greenSlime(stage1, map1, 6, 5);
-    new greenSlime(stage1, map1, 7, 12);
-    new greenSlime(stage1, map1, 13, 6);
-    new greenSlime(stage1, map1, 15, 12);
-    new greenSlime(stage1, map1, 18, 1);
-    new greenSlime(stage1, map1, 18, 18);
+    var greenSlimes = [
+      new greenSlime(stage1, map1, 1, 1),
+      new greenSlime(stage1, map1, 2, 16),
+      new greenSlime(stage1, map1, 6, 5),
+      new greenSlime(stage1, map1, 7, 12),
+      new greenSlime(stage1, map1, 13, 6),
+      new greenSlime(stage1, map1, 15, 12),
+      new greenSlime(stage1, map1, 18, 1),
+      new greenSlime(stage1, map1, 18, 18),
+    ];
 
     game.rootScene.addChild(stage1);
 
