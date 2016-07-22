@@ -15,15 +15,41 @@ var Character = enchant.Class.create(enchant.Sprite, {
   walkFrames: 3,
   speed: 4,
 
-  startPosition: function(tileX, tileY) {
-    this.x = settings.map.tileWidth * (tileX - 0.5);
-    this.y = settings.map.tileHeight * (tileY - 1);
+  /**
+   * Set start position of the sprite
+   *
+   * @update x
+   * @update y
+   *
+   * @param  {int} col The number of columns of tiles in the map.
+   * @param  {int} row The number of rows of tiles in the map.
+   * @return {null}
+   */
+  startPosition: function(col, row) {
+    this.x = settings.map.tileWidth * (col - 0.5);
+    this.y = settings.map.tileHeight * (row - 1);
   },
 
-  calFrame: function() {
+  /**
+   * Calculate the current frame
+   *
+   * @update frame
+   *
+   * @return {null}
+   */
+  currentFrame: function() {
     this.frame = this.direction * (this.image.width / this.width) + this.walk;
   },
 
+  /**
+   * Move the sprite
+   *
+   * @update x
+   * @update y
+   *
+   * @param  {Object} game The game core object.
+   * @return {null}
+   */
   move: function(game) {
     this.moveBy(this.vx, this.vy);
 
@@ -41,12 +67,28 @@ var Character = enchant.Class.create(enchant.Sprite, {
     }
   },
 
+  /**
+   * Retrieve whether the sprite can move to the destination
+   *
+   * @param  {Object} map The current map object.
+   * @return {Bool} true  If the sprite can move.
+   *                false If the sprite can't move.
+   */
   canMove: function(map) {
     var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
     var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
     return 0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y);
   },
 
+  /**
+   * Set the direction randomly
+   *
+   * @update direction
+   * @update vx
+   * @update vy
+   *
+   * @return {null}
+   */
   randomDirection() {
     this.direction = Math.floor(Math.random() * 4 + 1);
     if (this.direction == this.left) {
@@ -70,7 +112,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
  * @param  {Object} map
  */
 var Player = enchant.Class.create(Character, {
-  initialize: function(game, stage, map, tileX, tileY) {
+  initialize: function(game, stage, map, col, row) {
     Sprite.call(this, settings.character.width, settings.character.height);
 
     console.log(this);
@@ -86,7 +128,7 @@ var Player = enchant.Class.create(Character, {
     // move
     this.on('enterframe', function() {
 
-      this.calFrame();
+      this.currentFrame();
 
       if (this.isMoving) {
         this.move(game);
@@ -115,7 +157,7 @@ var Player = enchant.Class.create(Character, {
     });
 
     // position
-    this.startPosition(tileX, tileY);
+    this.startPosition(col, row);
     stage.addChild(this);
 
   }
@@ -123,11 +165,11 @@ var Player = enchant.Class.create(Character, {
 
 /**
  * Green slime class
- * @param  {int} tileX  Horizontal grid on the stage. Minimal 1 to max 18.
- * @param  {int} tileY  Vertical grid on the stage. Minimal 1 to max 18.
+ * @param  {int} col  Horizontal grid on the stage. Minimal 1 to max 18.
+ * @param  {int} row  Vertical grid on the stage. Minimal 1 to max 18.
  */
 var GreenSlime = enchant.Class.create(Character, {
-  initialize: function(game, stage, map, tileX, tileY) {
+  initialize: function(game, stage, map, col, row) {
     Sprite.call(this, settings.character.width, settings.character.height);
 
     // image
@@ -145,7 +187,7 @@ var GreenSlime = enchant.Class.create(Character, {
     // move
     this.on('enterframe', function() {
 
-      this.calFrame();
+      this.currentFrame();
 
       if (this.isMoving) {
         this.move(game);
@@ -166,7 +208,7 @@ var GreenSlime = enchant.Class.create(Character, {
     });
 
     // position
-    this.startPosition(tileX, tileY);
+    this.startPosition(col, row);
 
     var x = this.x + (this.width / 2);
     var y = this.y + (this.height / 2);

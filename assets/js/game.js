@@ -33,6 +33,9 @@ window.onload = function() {
       new GreenSlime(game, stage1, map1, 18, 1),
       new GreenSlime(game, stage1, map1, 18, 18),
     ];
+    var witches = [
+      new Witch(game, stage1, map1, 10, 10),
+    ];
     var player1 = new Player(game, stage1, map1, 9, 9);
 
     game.rootScene.addChild(stage1);
