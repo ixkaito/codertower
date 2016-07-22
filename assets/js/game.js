@@ -82,7 +82,20 @@ window.onload = function() {
           var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
           var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
           return 0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y);
-        }
+        },
+
+        randomDirection() {
+          this.direction = Math.floor(Math.random() * 4 + 1);
+          if (this.direction == this.left) {
+            this.vx = - this.speed;
+          } else if (this.direction == this.right) {
+            this.vx = this.speed;
+          } else if (this.direction == this.up) {
+            this.vy = - this.speed;
+          } else if (this.direction == this.down) {
+            this.vy = this.speed;
+          }
+        },
     });
 
     /**
@@ -176,16 +189,8 @@ window.onload = function() {
           } else if (this.delay == 0) {
             this.delay = this._delay;
             this.vx = this.vy = 0;
-            this.direction = Math.floor(Math.random() * 4 + 1);
-            if (this.direction == this.left) {
-              this.vx = - this.speed;
-            } else if (this.direction == this.right) {
-              this.vx = this.speed;
-            } else if (this.direction == this.up) {
-              this.vy = - this.speed;
-            } else if (this.direction == this.down) {
-              this.vy = this.speed;
-            }
+            this.randomDirection();
+
             if (this.vx || this.vy) {
               if (this.canMove(map)) {
                 this.isMoving = true;
