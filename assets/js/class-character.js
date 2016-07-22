@@ -4,22 +4,22 @@
  * @extends Sprite class
  */
 var HitZone = enchant.Class.create(enchant.Sprite, {
-  initialize: function(stage, width, height) {
+  initialize: function(scene, width, height) {
     Sprite.call(this);
     this.width = width;
     this.height = height;
     this.opacity = 0;
-    stage.addChild(this);
+    scene.addChild(this);
   }
 });
 
 var EnemyHitZone = enchant.Class.create(enchant.Sprite, {
-  initialize: function(stage, width, height) {
+  initialize: function(scene, width, height) {
     Sprite.call(this);
     this.width = width;
     this.height = height;
     this.opacity = 0;
-    stage.addChild(this);
+    scene.addChild(this);
   }
 });
 
@@ -143,15 +143,15 @@ var Character = enchant.Class.create(enchant.Sprite, {
  *
  * @extends Character class
  *
- * @param  {Object} stage
+ * @param  {Object} scene
  * @param  {Object} map
  */
 var Player = enchant.Class.create(Character, {
-  initialize: function(game, stage, map, col, row, enemies) {
+  initialize: function(game, scene, map, col, row, enemies) {
     Sprite.call(this);
     this.width = 32;
     this.height = 32;
-    this.hitZone = new HitZone(stage, 16, 16);
+    this.hitZone = new HitZone(scene, 16, 16);
 
     console.log(this);
 
@@ -206,22 +206,22 @@ var Player = enchant.Class.create(Character, {
 
     // position
     this.startPosition(map, col, row);
-    stage.addChild(this);
+    scene.addChild(this);
 
   }
 });
 
 /**
  * Green slime class
- * @param  {int} col  Horizontal grid on the stage. Minimal 1 to max 18.
- * @param  {int} row  Vertical grid on the stage. Minimal 1 to max 18.
+ * @param  {int} col  Horizontal grid on the scene. Minimal 1 to max 18.
+ * @param  {int} row  Vertical grid on the scene. Minimal 1 to max 18.
  */
 var GreenSlime = enchant.Class.create(Character, {
-  initialize: function(game, stage, map, col, row) {
+  initialize: function(game, scene, map, col, row) {
     Sprite.call(this);
     this.width = 32;
     this.height = 32;
-    this.hitZone = new EnemyHitZone(stage, 16, 16);
+    this.hitZone = new EnemyHitZone(scene, 16, 16);
 
     // image
     this.image = new Surface(96, 128);
@@ -265,7 +265,7 @@ var GreenSlime = enchant.Class.create(Character, {
     var y = this.y + (this.height / 2);
 
     if (!map.hitTest(x, y)) {
-      stage.addChild(this);
+      scene.addChild(this);
     }
   }
 });
