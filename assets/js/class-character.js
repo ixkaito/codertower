@@ -9,6 +9,7 @@ var HitZone = enchant.Class.create(enchant.Sprite, {
     this.width = width;
     this.height = height;
     this.opacity = 0;
+    this.backgroundColor = 'yellow'; // for debug
     scene.addChild(this);
   }
 });
@@ -19,6 +20,7 @@ var EnemyHitZone = enchant.Class.create(enchant.Sprite, {
     this.width = width;
     this.height = height;
     this.opacity = 0;
+    this.backgroundColor = 'blue'; // for debug
     scene.addChild(this);
   }
 });
@@ -39,6 +41,8 @@ var Character = enchant.Class.create(enchant.Sprite, {
   walk: 1,
   walkFrames: 3,
   speed: 4,
+  attack: 3,
+  attackFrames: 3,
 
   /**
    * Set start position of the sprite
@@ -173,17 +177,17 @@ var Player = enchant.Class.create(Character, {
       } else {
         this.vx = this.vy = 0;
         if (game.input.left) {
+          if (this.direction == this.left) this.vx = - this.speed;
           this.direction = this.left;
-          this.vx = - this.speed;
         } else if (game.input.right) {
+          if (this.direction == this.right) this.vx = this.speed;
           this.direction = this.right;
-          this.vx = this.speed;
         } else if (game.input.up) {
+          if (this.direction == this.up) this.vy = - this.speed;
           this.direction = this.up;
-          this.vy = - this.speed;
         } else if (game.input.down) {
+          if (this.direction == this.down) this.vy = this.speed;
           this.direction = this.down;
-          this.vy = this.speed;
         }
         if (this.vx || this.vy) {
           if (this.canMove(map)) {
@@ -193,13 +197,31 @@ var Player = enchant.Class.create(Character, {
         }
       }
 
+      if (buttonA.pressed) {
+        this.frame = this.direction * (this.image.width / this.width) + this.attack;
+        if (!(game.frame % this.attackFrames)) {
+          this.attack++;
+          this.attack %= this.attackFrames;
+          this.attack += this.walkFrames;
+        }
+      }
+
       /**
        * Game over
        */
       for (i = 0; i < enemies.length; i++) {
         if (this.hitZone.intersect(enemies[i].hitZone) != '') {
-          game.pushScene(gameover);
-          game.stop();
+
+          if (buttonA.pressed) {
+            enemies[i].hitZone.width = 0;
+            enemies[i].hitZone.height = 0;
+            scene.removeChild(enemies[i].hitZone);
+            scene.removeChild(enemies[i]);
+          } else {
+            game.pushScene(gameover);
+            game.stop();
+          }
+
         }
       }
 

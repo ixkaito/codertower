@@ -1,5 +1,7 @@
 enchant();
 
+var pad, buttonA;
+
 window.onload = function() {
 
   var game = new Core(320, 420);
@@ -46,10 +48,15 @@ window.onload = function() {
     /**
      * Add game pad
      */
-    var pad = new Pad();
+    pad = new Pad();
     pad.x = 0;
     pad.y = 320;
     game.rootScene.addChild(pad);
+
+    buttonA = new Button('A', 'light');
+    buttonA.x = 260;
+    buttonA.y = 355;
+    game.rootScene.addChild(buttonA);
 
   };
 
