@@ -4,11 +4,22 @@
  * @extends Sprite class
  */
 var HitZone = enchant.Class.create(enchant.Sprite, {
-  initialize: function(width, height) {
+  initialize: function(stage, width, height) {
     Sprite.call(this);
     this.width = width;
     this.height = height;
     this.opacity = 0;
+    stage.addChild(this);
+  }
+});
+
+var EnemyHitZone = enchant.Class.create(enchant.Sprite, {
+  initialize: function(stage, width, height) {
+    Sprite.call(this);
+    this.width = width;
+    this.height = height;
+    this.opacity = 0;
+    stage.addChild(this);
   }
 });
 
@@ -123,7 +134,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
    */
   syncHitZone: function() {
     this.hitZone.x = (this.width - this.hitZone.width) / 2 + this.x;
-    this.hitZone.y = (this.width - this.hitZone.width) / 2 + this.y;
+    this.hitZone.y = (this.width - this.hitZone.width) + this.y;
   }
 });
 
@@ -140,7 +151,7 @@ var Player = enchant.Class.create(Character, {
     Sprite.call(this);
     this.width = 32;
     this.height = 32;
-    this.hitZone = new HitZone(16, 16);
+    this.hitZone = new HitZone(stage, 16, 16);
 
     console.log(this);
 
@@ -182,19 +193,14 @@ var Player = enchant.Class.create(Character, {
         }
       }
 
-      // if(sprite.within(sprite2, 40)) { alert("hit!"); }
-
-      if(this.within(GreenSlime, 16)) {
-        stage.removeChild(this);
+      /**
+       * Game over
+       */
+      for (i = 0; i < enemies.length; i++) {
+        if (this.hitZone.intersect(enemies[i].hitZone) != '') {
+          game.stop();
+        }
       }
-      // .forEach(function(foo) {
-      //   console.log(foo);
-      // });
-
-      // this.intersect(GreenSlime).forEach(function(enemy){
-      //   console.log(Player);
-      //   stage.removeChild(enemy);
-      // });
 
     });
 
@@ -215,7 +221,7 @@ var GreenSlime = enchant.Class.create(Character, {
     Sprite.call(this);
     this.width = 32;
     this.height = 32;
-    this.hitZone = new HitZone(16, 16);
+    this.hitZone = new EnemyHitZone(stage, 16, 16);
 
     // image
     this.image = new Surface(96, 128);
