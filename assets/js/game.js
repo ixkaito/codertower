@@ -15,7 +15,7 @@ window.onload = function() {
 
   var game = new Core(320, 420);
   game.fps = 15;
-  game.preload('./assets/images/map.png', './assets/images/knight.png', './assets/images/green-slime.png');
+  game.preload('./assets/images/map.png', './assets/images/knight.png', './assets/images/slime-and-witch.png');
   game.onload = function() {
 
     /**
@@ -32,9 +32,6 @@ window.onload = function() {
       new GreenSlime(game, stage1, map1, 15, 12),
       new GreenSlime(game, stage1, map1, 18, 1),
       new GreenSlime(game, stage1, map1, 18, 18),
-    ];
-    var witches = [
-      new Witch(game, stage1, map1, 10, 10),
     ];
     var player1 = new Player(game, stage1, map1, 9, 9);
 

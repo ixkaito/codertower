@@ -175,7 +175,7 @@ var GreenSlime = enchant.Class.create(Character, {
     // image
     this.image = new Surface(96, 128);
     this.image.draw(
-      game.assets['./assets/images/green-slime.png'],
+      game.assets['./assets/images/slime-and-witch.png'],
       0, 0, 96, 128,
       0, 0, 96, 128
     );
