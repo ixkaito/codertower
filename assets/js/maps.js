@@ -76,7 +76,9 @@ var mapData1 = {
  */
 var FloorMap = enchant.Class.create(enchant.Map, {
   initialize: function(game, stage, mapData) {
-    Map.call(this, settings.map.tileWidth, settings.map.tileHeight);
+    Map.call(this);
+    this.tileWidth = 16;
+    this.tileHeight = 16;
 
     this.image = game.assets['./assets/images/map.png'];
     this.loadData(mapData.loadData[0], mapData.loadData[1]);

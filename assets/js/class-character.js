@@ -113,7 +113,9 @@ var Character = enchant.Class.create(enchant.Sprite, {
  */
 var Player = enchant.Class.create(Character, {
   initialize: function(game, stage, map, col, row) {
-    Sprite.call(this, settings.character.width, settings.character.height);
+    Sprite.call(this);
+    this.width = 32;
+    this.height = 32;
 
     console.log(this);
 
@@ -170,7 +172,9 @@ var Player = enchant.Class.create(Character, {
  */
 var GreenSlime = enchant.Class.create(Character, {
   initialize: function(game, stage, map, col, row) {
-    Sprite.call(this, settings.character.width, settings.character.height);
+    Sprite.call(this);
+    this.width = 32;
+    this.height = 32;
 
     // image
     this.image = new Surface(96, 128);
