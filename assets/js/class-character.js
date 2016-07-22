@@ -147,7 +147,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
  * @param  {Object} map
  */
 var Player = enchant.Class.create(Character, {
-  initialize: function(game, scene, map, col, row, enemies) {
+  initialize: function(game, scene, map, col, row, enemies, gameover) {
     Sprite.call(this);
     this.width = 32;
     this.height = 32;
@@ -198,6 +198,7 @@ var Player = enchant.Class.create(Character, {
        */
       for (i = 0; i < enemies.length; i++) {
         if (this.hitZone.intersect(enemies[i].hitZone) != '') {
+          game.pushScene(gameover);
           game.stop();
         }
       }
