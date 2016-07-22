@@ -150,7 +150,7 @@ window.onload = function() {
      * @param  {int} tileX  Horizontal grid on the stage. Minimal 1 to max 18.
      * @param  {int} tileY  Vertical grid on the stage. Minimal 1 to max 18.
      */
-    var greenSlime = Class.create(Character, {
+    var GreenSlime = Class.create(Character, {
       initialize: function(stage, map, tileX, tileY) {
         Sprite.call(this, settings.character.width, settings.character.height);
 
@@ -162,6 +162,10 @@ window.onload = function() {
           0, 0, 96, 128
         );
 
+        this._delay = 30;
+        this.delay = this._delay;
+        this.speed = 2;
+
         // move
         this.on('enterframe', function() {
 
@@ -169,7 +173,8 @@ window.onload = function() {
 
           if (this.isMoving) {
             this.move();
-          } else {
+          } else if (this.delay == 0) {
+            this.delay = this._delay;
             this.vx = this.vy = 0;
             this.direction = Math.floor(Math.random() * 4 + 1);
             if (this.direction == this.left) {
@@ -187,6 +192,8 @@ window.onload = function() {
                 arguments.callee.call(this);
               }
             }
+          } else {
+            this.delay -= 1;
           }
         });
 
@@ -208,14 +215,14 @@ window.onload = function() {
     var stage1 = new Group();
     var map1 = new FloorMap(stage1, mapData1);
     var greenSlimes = [
-      new greenSlime(stage1, map1, 1, 1),
-      new greenSlime(stage1, map1, 2, 16),
-      new greenSlime(stage1, map1, 6, 5),
-      new greenSlime(stage1, map1, 7, 12),
-      new greenSlime(stage1, map1, 13, 6),
-      new greenSlime(stage1, map1, 15, 12),
-      new greenSlime(stage1, map1, 18, 1),
-      new greenSlime(stage1, map1, 18, 18),
+      new GreenSlime(stage1, map1, 1, 1),
+      new GreenSlime(stage1, map1, 2, 16),
+      new GreenSlime(stage1, map1, 6, 5),
+      new GreenSlime(stage1, map1, 7, 12),
+      new GreenSlime(stage1, map1, 13, 6),
+      new GreenSlime(stage1, map1, 15, 12),
+      new GreenSlime(stage1, map1, 18, 1),
+      new GreenSlime(stage1, map1, 18, 18),
     ];
     var player1 = new Player(stage1, map1, 9, 9);
 
