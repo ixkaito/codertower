@@ -1,16 +1,5 @@
 enchant();
 
-var settings = {
-  map: {
-    tileWidth: 16,
-    tileHeight: 16,
-  },
-  character: {
-    width: 32,
-    height: 32,
-  },
-};
-
 window.onload = function() {
 
   var game = new Core(320, 420);

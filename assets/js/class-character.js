@@ -25,9 +25,9 @@ var Character = enchant.Class.create(enchant.Sprite, {
    * @param  {int} row The number of rows of tiles in the map.
    * @return {null}
    */
-  startPosition: function(col, row) {
-    this.x = settings.map.tileWidth * (col - 0.5);
-    this.y = settings.map.tileHeight * (row - 1);
+  startPosition: function(map, col, row) {
+    this.x = map.tileWidth * (col - 0.5);
+    this.y = map.tileHeight * (row - 1);
   },
 
   /**
@@ -50,7 +50,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
    * @param  {Object} game The game core object.
    * @return {null}
    */
-  move: function(game) {
+  move: function(game, map) {
     this.moveBy(this.vx, this.vy);
 
     if (!(game.frame % this.walkFrames)) {
@@ -59,8 +59,8 @@ var Character = enchant.Class.create(enchant.Sprite, {
     }
 
     if (
-      (this.vx && (this.x - (settings.map.tileWidth / 2)) % settings.map.tileWidth == 0) ||
-      (this.vy && this.y % settings.map.tileHeight == 0)
+      (this.vx && (this.x - (map.tileWidth / 2)) % map.tileWidth == 0) ||
+      (this.vy && this.y % map.tileHeight == 0)
     ) {
       this.isMoving = false;
       this.walk = 1;
@@ -133,7 +133,7 @@ var Player = enchant.Class.create(Character, {
       this.currentFrame();
 
       if (this.isMoving) {
-        this.move(game);
+        this.move(game, map);
       } else {
         this.vx = this.vy = 0;
         if (game.input.left) {
@@ -159,7 +159,7 @@ var Player = enchant.Class.create(Character, {
     });
 
     // position
-    this.startPosition(col, row);
+    this.startPosition(map, col, row);
     stage.addChild(this);
 
   }
@@ -194,7 +194,7 @@ var GreenSlime = enchant.Class.create(Character, {
       this.currentFrame();
 
       if (this.isMoving) {
-        this.move(game);
+        this.move(game, map);
       } else if (this.delay == 0) {
         this.delay = this._delay;
         this.vx = this.vy = 0;
@@ -212,7 +212,7 @@ var GreenSlime = enchant.Class.create(Character, {
     });
 
     // position
-    this.startPosition(col, row);
+    this.startPosition(map, col, row);
 
     var x = this.x + (this.width / 2);
     var y = this.y + (this.height / 2);
