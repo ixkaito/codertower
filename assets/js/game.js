@@ -12,7 +12,7 @@ window.onload = function() {
      */
     var stage1 = new Group();
     var map1 = new FloorMap(game, stage1, mapData1);
-    var greenSlimes = [
+    var greenSlimes1 = [
       new GreenSlime(game, stage1, map1, 1, 1),
       new GreenSlime(game, stage1, map1, 2, 16),
       new GreenSlime(game, stage1, map1, 6, 5),
@@ -22,7 +22,7 @@ window.onload = function() {
       new GreenSlime(game, stage1, map1, 18, 1),
       new GreenSlime(game, stage1, map1, 18, 18),
     ];
-    var player1 = new Player(game, stage1, map1, 9, 9);
+    var player1 = new Player(game, stage1, map1, 9, 9, greenSlimes1);
 
     game.rootScene.addChild(stage1);
 

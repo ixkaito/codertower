@@ -1,4 +1,18 @@
 /**
+ * HitZone class
+ *
+ * @extends Sprite class
+ */
+var HitZone = enchant.Class.create(enchant.Sprite, {
+  initialize: function(width, height) {
+    Sprite.call(this);
+    this.width = width;
+    this.height = height;
+    this.opacity = 0;
+  }
+});
+
+/**
  * Character class
  *
  * @extends Sprite class
@@ -89,7 +103,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
    *
    * @return {null}
    */
-  randomDirection() {
+  randomDirection: function() {
     this.direction = Math.floor(Math.random() * 4 + 1);
     if (this.direction == this.left) {
       this.vx = - this.speed;
@@ -101,6 +115,16 @@ var Character = enchant.Class.create(enchant.Sprite, {
       this.vy = this.speed;
     }
   },
+
+  /**
+   * Synchronize the hit zone with the sprite
+   *
+   * @return {null}
+   */
+  syncHitZone: function() {
+    this.hitZone.x = (this.width - this.hitZone.width) / 2 + this.x;
+    this.hitZone.y = (this.width - this.hitZone.width) / 2 + this.y;
+  }
 });
 
 /**
@@ -112,10 +136,11 @@ var Character = enchant.Class.create(enchant.Sprite, {
  * @param  {Object} map
  */
 var Player = enchant.Class.create(Character, {
-  initialize: function(game, stage, map, col, row) {
+  initialize: function(game, stage, map, col, row, enemies) {
     Sprite.call(this);
     this.width = 32;
     this.height = 32;
+    this.hitZone = new HitZone(16, 16);
 
     console.log(this);
 
@@ -129,7 +154,7 @@ var Player = enchant.Class.create(Character, {
 
     // move
     this.on('enterframe', function() {
-
+      this.syncHitZone();
       this.currentFrame();
 
       if (this.isMoving) {
@@ -156,6 +181,21 @@ var Player = enchant.Class.create(Character, {
           }
         }
       }
+
+      // if(sprite.within(sprite2, 40)) { alert("hit!"); }
+
+      if(this.within(GreenSlime, 16)) {
+        stage.removeChild(this);
+      }
+      // .forEach(function(foo) {
+      //   console.log(foo);
+      // });
+
+      // this.intersect(GreenSlime).forEach(function(enemy){
+      //   console.log(Player);
+      //   stage.removeChild(enemy);
+      // });
+
     });
 
     // position
@@ -175,13 +215,14 @@ var GreenSlime = enchant.Class.create(Character, {
     Sprite.call(this);
     this.width = 32;
     this.height = 32;
+    this.hitZone = new HitZone(16, 16);
 
     // image
     this.image = new Surface(96, 128);
     this.image.draw(
       game.assets['./assets/images/slime-and-witch.png'],
       0, 0, 96, 128,
-      0, 0, 96, 128
+      0, 4, 96, 128
     );
 
     this._delay = 30;
@@ -190,7 +231,7 @@ var GreenSlime = enchant.Class.create(Character, {
 
     // move
     this.on('enterframe', function() {
-
+      this.syncHitZone();
       this.currentFrame();
 
       if (this.isMoving) {
