@@ -5,7 +5,7 @@
  */
 var HitZone = enchant.Class.create(enchant.Sprite, {
   initialize: function(scene, width, height) {
-    Sprite.call(this);
+    enchant.Sprite.call(this);
     this.width = width;
     this.height = height;
     this.opacity = 0;
@@ -15,7 +15,7 @@ var HitZone = enchant.Class.create(enchant.Sprite, {
 
 var EnemyHitZone = enchant.Class.create(enchant.Sprite, {
   initialize: function(scene, width, height) {
-    Sprite.call(this);
+    enchant.Sprite.call(this);
     this.width = width;
     this.height = height;
     this.opacity = 0;
@@ -148,7 +148,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
  */
 var Player = enchant.Class.create(Character, {
   initialize: function(game, scene, map, col, row, enemies, gameover) {
-    Sprite.call(this);
+    enchant.Sprite.call(this);
     this.width = 32;
     this.height = 32;
     this.hitZone = new HitZone(scene, 16, 16);
@@ -219,7 +219,7 @@ var Player = enchant.Class.create(Character, {
  */
 var GreenSlime = enchant.Class.create(Character, {
   initialize: function(game, scene, map, col, row) {
-    Sprite.call(this);
+    enchant.Sprite.call(this);
     this.width = 32;
     this.height = 32;
     this.hitZone = new EnemyHitZone(scene, 16, 16);
