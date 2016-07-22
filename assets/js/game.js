@@ -1,5 +1,16 @@
 enchant();
 
+var settings = {
+  map: {
+    tileWidth: 16,
+    tileHeight: 16,
+  },
+  character: {
+    width: 32,
+    height: 32,
+  },
+};
+
 window.onload = function() {
 
   var game = new Core(320, 420);
@@ -12,13 +23,9 @@ window.onload = function() {
      * @param  {Object} stage
      * @param  {Object} mapData
      */
-    var map = Class.create(Map, {
+    var FloorMap = Class.create(Map, {
       initialize: function(stage, mapData) {
-        this.grid = {
-          width: 16,
-          height: 16,
-        }
-        Map.call(this, this.grid.width, this.grid.height);
+        Map.call(this, settings.map.tileWidth, settings.map.tileHeight);
 
         this.image = game.assets['./assets/images/map.png'];
         this.loadData(mapData.loadData[0], mapData.loadData[1]);
@@ -28,82 +35,85 @@ window.onload = function() {
       }
     });
 
+    /**
+     * Character class
+     *
+     * @extends Sprite class
+     */
     var Character = Class.create(Sprite, {
-        defaultWidth: 32,
-        defaultHeight: 32,
+
+        isMoving: false,
+        direction: 0,
+        left: 1,
+        right: 2,
+        up: 3,
+        down: 4,
+        walk: 1,
+        walkFrames: 3,
+        speed: 4,
+
+        startPosition: function(tileX, tileY) {
+          this.x = settings.map.tileWidth * (tileX - 0.5);
+          this.y = settings.map.tileHeight * (tileY - 1);
+        },
+
+        calFrame: function() {
+          this.frame = this.direction * (this.image.width / this.width) + this.walk;
+        },
+
+        move: function() {
+          this.moveBy(this.vx, this.vy);
+
+          if (!(game.frame % this.walkFrames)) {
+            this.walk++;
+            this.walk %= this.walkFrames;
+          }
+
+          if (
+            (this.vx && (this.x - (settings.map.tileWidth / 2)) % settings.map.tileWidth == 0) ||
+            (this.vy && this.y % settings.map.tileHeight == 0)
+          ) {
+            this.isMoving = false;
+            this.walk = 1;
+          }
+        },
+
+        canMove: function(map) {
+          var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
+          var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
+          return 0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y);
+        }
     });
 
     /**
      * Player class
+     *
+     * @extends Character class
+     *
      * @param  {Object} stage
      * @param  {Object} map
      */
     var Player = Class.create(Character, {
-      initialize: function(stage, map) {
-        Sprite.call(this, this.defaultWidth, this.defaultHeight);
+      initialize: function(stage, map, tileX, tileY) {
+        Sprite.call(this, settings.character.width, settings.character.height);
+
+        console.log(this);
 
         // image
-        this.surface = {
-          image: game.assets['./assets/images/knight.png'],
-          width: 192,
-          height: 128,
-        };
-        this.surface.column = this.surface.width / this.width;
-        this.surface.clip = {
-          x: 96,
-          y: 0,
-          width: this.surface.width,
-          height: this.surface.height,
-        };
-        this.surface.position = {
-          x: 0,
-          y: 0,
-          width: this.surface.width,
-          height: this.surface.height,
-        }
-
-        var surface = new Surface(this.surface.width, this.surface.height);
-        surface.draw(
-          this.surface.image,
-          this.surface.clip.x,
-          this.surface.clip.y,
-          this.surface.clip.width,
-          this.surface.clip.height,
-          this.surface.position.x,
-          this.surface.position.y,
-          this.surface.position.width,
-          this.surface.position.height
+        this.image = new Surface(192, 128);
+        this.image.draw(
+          game.assets['./assets/images/knight.png'],
+          96, 0, 192, 128,
+           0, 0, 192, 128
         );
-        this.image = surface;
 
         // move
-        this.isMoving = false;
-        this.direction = 0;
-        this.left = 1;
-        this.right = 2;
-        this.up = 3;
-        this.down = 4;
-        this.walk = 1;
-        this.walkFrames = 3;
-        this.speed = 4;
-
         this.on('enterframe', function() {
-          this.frame = this.direction * this.surface.column + this.walk;
+
+          this.calFrame();
+
           if (this.isMoving) {
-            this.moveBy(this.vx, this.vy);
-
-            if (!(game.frame % this.walkFrames)) {
-              this.walk++;
-              this.walk %= this.walkFrames;
-            }
-
-            if (
-              (this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) ||
-              (this.vy && this.y % map.grid.height == 0)
-            ) {
-              this.isMoving = false;
-              this.walk = 1;
-            }
+            this.move();
           } else {
             this.vx = this.vy = 0;
             if (game.input.left) {
@@ -120,9 +130,7 @@ window.onload = function() {
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
-              var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
-              var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
-              if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+              if (this.canMove(map)) {
                 this.isMoving = true;
                 arguments.callee.call(this);
               }
@@ -131,8 +139,7 @@ window.onload = function() {
         });
 
         // position
-        this.x = (map.width - this.width - map.grid.width) / 2;
-        this.y = (map.height - this.height) / 2;
+        this.startPosition(tileX, tileY);
         stage.addChild(this);
 
       }
@@ -140,77 +147,28 @@ window.onload = function() {
 
     /**
      * Green slime class
-     * @param  {int} xGrid  Horizontal grid on the stage. Minimal 1 to max 18.
-     * @param  {int} yGrid  Vertical grid on the stage. Minimal 1 to max 18.
+     * @param  {int} tileX  Horizontal grid on the stage. Minimal 1 to max 18.
+     * @param  {int} tileY  Vertical grid on the stage. Minimal 1 to max 18.
      */
-    var greenSlime = Class.create(Sprite, {
-      initialize: function(stage, map, xGrid, yGrid) {
-        this.width = 32;
-        this.height = 32;
-        Sprite.call(this, this.width, this.height);
+    var greenSlime = Class.create(Character, {
+      initialize: function(stage, map, tileX, tileY) {
+        Sprite.call(this, settings.character.width, settings.character.height);
 
         // image
-        this.surface = {
-          image: game.assets['./assets/images/green-slime.png'],
-          width: 96,
-          height: 128,
-        };
-        this.surface.column = this.surface.width / this.width;
-        this.surface.clip = {
-          x: 0,
-          y: 0,
-          width: this.surface.width,
-          height: this.surface.height,
-        };
-        this.surface.position = {
-          x: 0,
-          y: 0,
-          width: this.surface.width,
-          height: this.surface.height,
-        }
-
-        var surface = new Surface(this.surface.width, this.surface.height);
-        surface.draw(
-          this.surface.image,
-          this.surface.clip.x,
-          this.surface.clip.y,
-          this.surface.clip.width,
-          this.surface.clip.height,
-          this.surface.position.x,
-          this.surface.position.y,
-          this.surface.position.width,
-          this.surface.position.height
+        this.image = new Surface(96, 128);
+        this.image.draw(
+          game.assets['./assets/images/green-slime.png'],
+          0, 0, 96, 128,
+          0, 0, 96, 128
         );
-        this.image = surface;
 
         // move
-        this.isMoving = false;
-        this.direction = 0;
-        this.left = 1;
-        this.right = 2;
-        this.up = 3;
-        this.down = 4;
-        this.walk = 1;
-        this.walkFrames = 3;
-        this.speed = 4;
-
         this.on('enterframe', function() {
-          this.frame = this.direction * this.surface.column + this.walk;
+
+          this.calFrame();
+
           if (this.isMoving) {
-            this.moveBy(this.vx, this.vy);
-
-            if (!(game.frame % this.walkFrames)) {
-              this.walk++;
-              this.walk %= this.walkFrames;
-            }
-
-            if (
-              (this.vx && (this.x - (map.grid.width / 2)) % map.grid.width == 0) ||
-              (this.vy && this.y % map.grid.height == 0)
-            ) {
-              this.isMoving = false;
-              this.walk = 1;
-            }
+            this.move();
           } else {
             this.vx = this.vy = 0;
             this.direction = Math.floor(Math.random() * 4 + 1);
@@ -224,10 +182,7 @@ window.onload = function() {
               this.vy = this.speed;
             }
             if (this.vx || this.vy) {
-              var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
-              var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
-              if (
-                0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+              if (this.canMove(map)) {
                 this.isMoving = true;
                 arguments.callee.call(this);
               }
@@ -236,8 +191,7 @@ window.onload = function() {
         });
 
         // position
-        this.x = map.grid.width * (xGrid - 0.5);
-        this.y = map.grid.height * (yGrid - 1);
+        this.startPosition(tileX, tileY);
 
         var x = this.x + (this.width / 2);
         var y = this.y + (this.height / 2);
@@ -252,7 +206,7 @@ window.onload = function() {
      * Stage 1
      */
     var stage1 = new Group();
-    var map1 = new map(stage1, mapData1);
+    var map1 = new FloorMap(stage1, mapData1);
     var greenSlimes = [
       new greenSlime(stage1, map1, 1, 1),
       new greenSlime(stage1, map1, 2, 16),
@@ -263,7 +217,7 @@ window.onload = function() {
       new greenSlime(stage1, map1, 18, 1),
       new greenSlime(stage1, map1, 18, 18),
     ];
-    var player1 = new Player(stage1, map1);
+    var player1 = new Player(stage1, map1, 9, 9);
 
     game.rootScene.addChild(stage1);
 
