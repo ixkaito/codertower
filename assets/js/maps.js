@@ -71,19 +71,21 @@ var mapData1 = {
 
 /**
  * Map class
- * @param  {Object} stage
+ * @param  {Object} scene
  * @param  {Object} mapData
  */
 var FloorMap = enchant.Class.create(enchant.Map, {
-  initialize: function(game, stage, mapData) {
+  initialize: function(scene, mapData) {
     Map.call(this);
     this.tileWidth = 16;
     this.tileHeight = 16;
+
+    var game = enchant.Core.instance;
 
     this.image = game.assets['./assets/images/map.png'];
     this.loadData(mapData.loadData[0], mapData.loadData[1]);
     this.collisionData = mapData.collisionData;
 
-    stage.addChild(this);
+    scene.addChild(this);
   }
 });

@@ -76,13 +76,14 @@ var Character = enchant.Class.create(enchant.Sprite, {
    * @update x
    * @update y
    *
-   * @param  {Object} game The game core object.
    * @return {null}
    */
-  move: function(game, map) {
+  move: function(map) {
+    var core = enchant.Core.instance;
+
     this.moveBy(this.vx, this.vy);
 
-    if (!(game.frame % this.walkFrames)) {
+    if (!(core.frame % this.walkFrames)) {
       this.walk++;
       this.walk %= this.walkFrames;
     }
@@ -151,7 +152,9 @@ var Character = enchant.Class.create(enchant.Sprite, {
  * @param  {Object} map
  */
 var Player = enchant.Class.create(Character, {
-  initialize: function(game, scene, map, col, row, enemies, gameover) {
+  initialize: function(scene, map, col, row, enemies, gameover) {
+    var game = enchant.Core.instance;
+
     enchant.Sprite.call(this);
     this.width = 32;
     this.height = 32;
@@ -173,7 +176,7 @@ var Player = enchant.Class.create(Character, {
       this.currentFrame();
 
       if (this.isMoving) {
-        this.move(game, map);
+        this.move(map);
       } else {
         this.vx = this.vy = 0;
         if (game.input.left) {
@@ -240,7 +243,9 @@ var Player = enchant.Class.create(Character, {
  * @param  {int} row  Vertical grid on the scene. Minimal 1 to max 18.
  */
 var GreenSlime = enchant.Class.create(Character, {
-  initialize: function(game, scene, map, col, row) {
+  initialize: function(scene, map, col, row) {
+    var game = enchant.Core.instance;
+
     enchant.Sprite.call(this);
     this.width = 32;
     this.height = 32;
@@ -264,7 +269,7 @@ var GreenSlime = enchant.Class.create(Character, {
       this.currentFrame();
 
       if (this.isMoving) {
-        this.move(game, map);
+        this.move(map);
       } else if (this.delay == 0) {
         this.delay = this._delay;
         this.vx = this.vy = 0;
