@@ -31,7 +31,7 @@ window.onload = function() {
      */
     var stage1 = new Group();
     var map1 = new FloorMap(stage1, mapData1);
-    var greenSlimes1 = [
+    var enemies1 = [
       new GreenSlime(stage1, map1, 1, 1),
       new GreenSlime(stage1, map1, 2, 16),
       new GreenSlime(stage1, map1, 6, 5),
@@ -41,7 +41,7 @@ window.onload = function() {
       new GreenSlime(stage1, map1, 18, 1),
       new GreenSlime(stage1, map1, 18, 18),
     ];
-    var player1 = new Player(stage1, map1, 9, 9, greenSlimes1, gameover);
+    var player1 = new Player(stage1, map1, 9, 9, enemies1, gameover);
 
     game.rootScene.addChild(stage1);
 
