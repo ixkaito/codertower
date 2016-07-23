@@ -57,6 +57,7 @@ window.onload = function() {
     buttonA.x = 260;
     buttonA.y = 355;
     game.rootScene.addChild(buttonA);
+    game.keybind( 'A'.charCodeAt(0), 'a' );
 
   };
 

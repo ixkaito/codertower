@@ -200,7 +200,7 @@ var Player = enchant.Class.create(Character, {
         }
       }
 
-      if (buttonA.pressed) {
+      if (buttonA.pressed || game.input.a) {
         this.frame = this.direction * (this.image.width / this.width) + this.attack;
         if (!(game.frame % this.attackFrames)) {
           this.attack++;
@@ -215,7 +215,7 @@ var Player = enchant.Class.create(Character, {
       for (i = 0; i < enemies.length; i++) {
         if (this.hitZone.intersect(enemies[i].hitZone) != '') {
 
-          if (buttonA.pressed) {
+          if (buttonA.pressed || game.input.a) {
             enemies[i].hitZone.width = 0;
             enemies[i].hitZone.height = 0;
             scene.removeChild(enemies[i].hitZone);
