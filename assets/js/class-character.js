@@ -1,48 +1,23 @@
 /**
- * HitZone class
- *
- * @extends Sprite class
- */
-var HitZone = enchant.Class.create(enchant.Sprite, {
-  initialize: function(scene, width, height) {
-    enchant.Sprite.call(this);
-    this.width = width;
-    this.height = height;
-    this.opacity = 0;
-    this.backgroundColor = 'yellow'; // for debug
-    scene.addChild(this);
-  }
-});
-
-var EnemyHitZone = enchant.Class.create(enchant.Sprite, {
-  initialize: function(scene, width, height) {
-    enchant.Sprite.call(this);
-    this.width = width;
-    this.height = height;
-    this.opacity = 0;
-    this.backgroundColor = 'blue'; // for debug
-    scene.addChild(this);
-  }
-});
-
-/**
  * Character class
  *
  * @extends Sprite class
  */
 var Character = enchant.Class.create(enchant.Sprite, {
 
-  isMoving: false,
   direction: 0,
   left: 1,
   right: 2,
   up: 3,
   down: 4,
-  walk: 1,
-  walkFrames: 3,
-  speed: 4,
+
   attack: 3,
   attackFrames: 3,
+  isMoving: false,
+  hp: 0,
+  speed: 4,
+  walk: 1,
+  walkFrames: 3,
 
   /**
    * Set start position of the sprite
@@ -52,49 +27,11 @@ var Character = enchant.Class.create(enchant.Sprite, {
    *
    * @param  {int} col The number of columns of tiles in the map.
    * @param  {int} row The number of rows of tiles in the map.
-   * @return {null}
+   * @return {undefined}
    */
   startPosition: function(map, col, row) {
-    this.x = map.tileWidth * (col - 0.5);
-    this.y = map.tileHeight * (row - 1);
-  },
-
-  /**
-   * Calculate the current frame
-   *
-   * @update frame
-   *
-   * @return {null}
-   */
-  currentFrame: function() {
-    this.frame = this.direction * (this.image.width / this.width) + this.walk;
-  },
-
-  /**
-   * Move the sprite
-   *
-   * @update x
-   * @update y
-   *
-   * @return {null}
-   */
-  move: function(map) {
-    var core = enchant.Core.instance;
-
-    this.moveBy(this.vx, this.vy);
-
-    if (!(core.frame % this.walkFrames)) {
-      this.walk++;
-      this.walk %= this.walkFrames;
-    }
-
-    if (
-      (this.vx && (this.x - (map.tileWidth / 2)) % map.tileWidth == 0) ||
-      (this.vy && this.y % map.tileHeight == 0)
-    ) {
-      this.isMoving = false;
-      this.walk = 1;
-    }
+    this.x = col ? map.tileWidth * col : 0;
+    this.y = row ? map.tileHeight * row : 0;
   },
 
   /**
@@ -105,9 +42,64 @@ var Character = enchant.Class.create(enchant.Sprite, {
    *                false If the sprite can't move.
    */
   canMove: function(map) {
-    var x = this.x + (this.width / 2) + (this.vx ? this.vx / Math.abs(this.vx) * (this.width / 2) : 0);
-    var y = this.y + (this.height / 2) + (this.vy ? this.vy / Math.abs(this.vy) * (this.height / 2) : 0);
-    return 0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y);
+    var x = this.x + (map.tileWidth / 2) + (this.vx ? this.vx / Math.abs(this.vx) * map.tileWidth : 0);
+    var y = this.y + (map.tileHeight / 2) + (this.vy ? this.vy / Math.abs(this.vy) * map.tileHeight : 0);
+    return 0 <= x && x < map.width &&
+           0 <= y && y < map.height &&
+           !map.hitTest(x, y);
+  },
+
+  /**
+   * Move the sprite
+   *
+   * @update x
+   * @update y
+   *
+   * @return {undefined}
+   */
+  move: function(map) {
+    var game = enchant.Core.instance;
+
+    this.moveBy(this.vx, this.vy);
+
+    if (!(game.frame % this.walkFrames)) {
+      this.walk++;
+      this.walk %= this.walkFrames;
+    }
+
+    if (
+      (this.vx && this.x % map.tileWidth == 0) ||
+      (this.vy && this.y % map.tileHeight == 0)
+    ) {
+      this.isMoving = false;
+      this.walk = 1;
+    }
+  },
+
+  /**
+   * Stick the surface with the sprite
+   *
+   * @update surface.x
+   * @update surface.y
+   *
+   * @return {nudefined}
+   */
+  stickSurface: function() {
+    var offsetX = 0;
+    var offsetY = - 8;
+    this.surface.x = (this.width - this.surface.width) / 2 + this.x + offsetX;
+    this.surface.y = (this.height - this.surface.height) / 2 + this.y + offsetY;
+  },
+
+  /**
+   * Retrieve the current frame of the surface
+   *
+   * @update surface.frame
+   *
+   * @return {nudefined}
+   */
+  currentSurfaceFrame: function() {
+    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.walk;
   },
 
   /**
@@ -131,16 +123,6 @@ var Character = enchant.Class.create(enchant.Sprite, {
       this.vy = this.speed;
     }
   },
-
-  /**
-   * Synchronize the hit zone with the sprite
-   *
-   * @return {null}
-   */
-  syncHitZone: function() {
-    this.hitZone.x = (this.width - this.hitZone.width) / 2 + this.x;
-    this.hitZone.y = (this.width - this.hitZone.width) + this.y;
-  }
 });
 
 /**
@@ -150,21 +132,19 @@ var Character = enchant.Class.create(enchant.Sprite, {
  *
  * @param  {Object} scene
  * @param  {Object} map
+ * @param  {int}    col   The number of columns of tiles in the map.
+ * @param  {int}    row   The number of rows of tiles in the map.
  */
 var Player = enchant.Class.create(Character, {
   initialize: function(scene, map, col, row, enemies, gameover) {
     var game = enchant.Core.instance;
+    enchant.Sprite.call(this, 16, 16);
+    this.backgroundColor = 'black';
 
-    enchant.Sprite.call(this);
-    this.width = 32;
-    this.height = 32;
-    this.hitZone = new HitZone(scene, 16, 16);
-
-    console.log(this);
-
-    // image
-    this.image = new Surface(192, 128);
-    this.image.draw(
+    // create surface
+    this.surface = new Sprite(32, 32);
+    this.surface.image = new Surface(192, 128);
+    this.surface.image.draw(
       game.assets['./assets/images/knight.png'],
       96, 0, 192, 128,
        0, 0, 192, 128
@@ -172,8 +152,8 @@ var Player = enchant.Class.create(Character, {
 
     // move
     this.on('enterframe', function() {
-      this.syncHitZone();
-      this.currentFrame();
+      this.stickSurface();
+      this.currentSurfaceFrame();
 
       if (this.isMoving) {
         this.move(map);
@@ -201,7 +181,7 @@ var Player = enchant.Class.create(Character, {
       }
 
       if (buttonA.pressed || game.input.a) {
-        this.frame = this.direction * (this.image.width / this.width) + this.attack;
+        this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.attack;
         if (!(game.frame % this.attackFrames)) {
           this.attack++;
           this.attack %= this.attackFrames;
@@ -213,7 +193,7 @@ var Player = enchant.Class.create(Character, {
        * Game over
        */
       for (i = 0; i < enemies.length; i++) {
-        if (this.hitZone.intersect(enemies[i].hitZone) != '') {
+        if (this.intersect(enemies[i]) != '') {
 
           if (buttonA.pressed || game.input.a) {
             enemies[i].hitZone.width = 0;
@@ -233,30 +213,33 @@ var Player = enchant.Class.create(Character, {
     // position
     this.startPosition(map, col, row);
     scene.addChild(this);
-
+    scene.addChild(this.surface);
   }
 });
 
+var Enemy = enchant.Class.create(Character, {});
+
 /**
  * Green slime class
- * @param  {int} col  Horizontal grid on the scene. Minimal 1 to max 18.
- * @param  {int} row  Vertical grid on the scene. Minimal 1 to max 18.
+ *
+ * @param  {Object} scene
+ * @param  {Object} map
+ * @param  {int}    col   The number of columns of tiles in the map.
+ * @param  {int}    row   The number of rows of tiles in the map.*
  */
-var GreenSlime = enchant.Class.create(Character, {
+var GreenSlime = enchant.Class.create(Enemy, {
   initialize: function(scene, map, col, row) {
     var game = enchant.Core.instance;
+    enchant.Sprite.call(this, 16, 16);
+    this.backgroundColor = 'blue';
 
-    enchant.Sprite.call(this);
-    this.width = 32;
-    this.height = 32;
-    this.hitZone = new EnemyHitZone(scene, 16, 16);
-
-    // image
-    this.image = new Surface(96, 128);
-    this.image.draw(
+    // create surface
+    this.surface = new Sprite(32, 32);
+    this.surface.image = new Surface(192, 128);
+    this.surface.image.draw(
       game.assets['./assets/images/slime-and-witch.png'],
-      0, 0, 96, 128,
-      0, 4, 96, 128
+      0, 0, 192, 128,
+      0, 4, 192, 128
     );
 
     this._delay = 30;
@@ -265,8 +248,8 @@ var GreenSlime = enchant.Class.create(Character, {
 
     // move
     this.on('enterframe', function() {
-      this.syncHitZone();
-      this.currentFrame();
+      this.stickSurface();
+      this.currentSurfaceFrame();
 
       if (this.isMoving) {
         this.move(map);
@@ -288,12 +271,7 @@ var GreenSlime = enchant.Class.create(Character, {
 
     // position
     this.startPosition(map, col, row);
-
-    var x = this.x + (this.width / 2);
-    var y = this.y + (this.height / 2);
-
-    if (!map.hitTest(x, y)) {
-      scene.addChild(this);
-    }
+    scene.addChild(this);
+    scene.addChild(this.surface);
   }
 });
