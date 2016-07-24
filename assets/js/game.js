@@ -65,9 +65,9 @@ window.onload = function() {
     pad.y = 320;
     game.rootScene.addChild(pad);
 
-    // buttonA = new Button('A', 'light');
-    // buttonA.x = 260;
-    // buttonA.y = 355;
+    /**
+     * Add game buttons
+     */
     game.rootScene.addChild(game.buttons.a);
     game.keybind( 'A'.charCodeAt(0), 'a' );
 
