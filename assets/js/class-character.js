@@ -136,10 +136,9 @@ var Character = enchant.Class.create(enchant.Sprite, {
  * @param  {int}    row   The number of rows of tiles in the map.
  */
 var Player = enchant.Class.create(Character, {
-  initialize: function(scene, map, col, row, enemies, gameover) {
+  initialize: function(scene, map, col, row) {
     var game = enchant.Core.instance;
     enchant.Sprite.call(this, 16, 16);
-    this.backgroundColor = 'black';
 
     // create surface
     this.surface = new Sprite(32, 32);
@@ -149,6 +148,14 @@ var Player = enchant.Class.create(Character, {
       96, 0, 192, 128,
        0, 0, 192, 128
     );
+
+    // retrieve all the enemies on the current stage
+    var enemies = [];
+    scene.childNodes.forEach(function(node) {
+      if (node.isEnemy == true) {
+        enemies.push(node);
+      }
+    });
 
     // move
     this.on('enterframe', function() {
@@ -180,7 +187,7 @@ var Player = enchant.Class.create(Character, {
         }
       }
 
-      if (buttonA.pressed || game.input.a) {
+      if (game.buttons.a.pressed || game.input.a) {
         this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.attack;
         if (!(game.frame % this.attackFrames)) {
           this.attack++;
@@ -193,15 +200,14 @@ var Player = enchant.Class.create(Character, {
        * Game over
        */
       for (i = 0; i < enemies.length; i++) {
-        if (this.intersect(enemies[i]) != '') {
 
-          if (buttonA.pressed || game.input.a) {
-            enemies[i].hitZone.width = 0;
-            enemies[i].hitZone.height = 0;
-            scene.removeChild(enemies[i].hitZone);
+        if (this.within(enemies[i], 12) && !enemies[i].dead) {
+          if (game.buttons.a.pressed || game.input.a) {
+            enemies[i].dead = true;
             scene.removeChild(enemies[i]);
+            scene.removeChild(enemies[i].surface);
           } else {
-            game.pushScene(gameover);
+            game.over();
             game.stop();
           }
 
@@ -217,7 +223,14 @@ var Player = enchant.Class.create(Character, {
   }
 });
 
-var Enemy = enchant.Class.create(Character, {});
+/**
+ * Enemy class
+ *
+ * @extends Character class
+ */
+var Enemy = enchant.Class.create(Character, {
+  isEnemy: true,
+});
 
 /**
  * Green slime class
@@ -231,7 +244,6 @@ var GreenSlime = enchant.Class.create(Enemy, {
   initialize: function(scene, map, col, row) {
     var game = enchant.Core.instance;
     enchant.Sprite.call(this, 16, 16);
-    this.backgroundColor = 'blue';
 
     // create surface
     this.surface = new Sprite(32, 32);
