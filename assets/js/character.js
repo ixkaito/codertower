@@ -10,6 +10,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
   right: 2,
   up: 3,
   down: 4,
+  fps: 5,
 
   isAttacking: false,
   _attackFrame: 3,
@@ -17,7 +18,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
   isMoving: false,
   hp: 0,
   speed: 4,
-  walk: 1,
+  _walkFrame: 1,
   walkFrames: 3,
 
   /**
@@ -63,9 +64,9 @@ var Character = enchant.Class.create(enchant.Sprite, {
 
     this.moveBy(this.vx, this.vy);
 
-    if (!(game.frame % 3)) {
-      this.walk++;
-      this.walk %= this.walkFrames;
+    if (!(game.frame % (game.fps / this.fps))) {
+      this._walkFrame++;
+      this._walkFrame %= this.walkFrames;
     }
 
     if (
@@ -73,7 +74,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
       (this.vy && this.y % map.tileHeight == 0)
     ) {
       this.isMoving = false;
-      this.walk = 1;
+      this._walkFrame = 1;
     }
   },
 
@@ -100,7 +101,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
    * @return {nudefined}
    */
   currentSurfaceFrame: function() {
-    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.walk;
+    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this._walkFrame;
   },
 
   attack: function() {
@@ -108,7 +109,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
 
     this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this._attackFrame;
 
-    if (!(game.frame % 3)) {
+    if (!(game.frame % (game.fps / this.fps))) {
       this._attackFrame++;
       this._attackFrame %= this.attackFrames;
       this._attackFrame += this.walkFrames;
