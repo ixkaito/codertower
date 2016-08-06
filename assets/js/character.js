@@ -39,6 +39,36 @@ var Character = enchant.Class.create(enchant.Sprite, {
   },
 
   /**
+   * Retrieve the current frame of the surface
+   *
+   * @update surface.frame
+   *
+   * @return {nudefined}
+   */
+  currentSurfaceFrame: function() {
+    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width)
+                         + (this.isAttacking ? this._attackFrame : this._walkFrame);
+  },
+
+  /**
+   * Calculate the attack frame
+   *
+   * @return {undefined}
+   */
+  attack: function() {
+    var game = enchant.Core.instance;
+
+    if (!(game.frame % (game.fps / this.fps))) {
+      this._attackFrame++;
+      this._attackFrame %= this.attackFrames;
+      this._attackFrame += this.walkFrames;
+    }
+    else if (this._attackFrame == 5) {
+      this.isAttacking = false;
+    }
+  },
+
+  /**
    * Retrieve whether the sprite can move to the destination
    *
    * @param  {Object} map The current map object.
@@ -93,31 +123,6 @@ var Character = enchant.Class.create(enchant.Sprite, {
     var offsetY = - 8;
     this.surface.x = (this.width - this.surface.width) / 2 + this.x + offsetX;
     this.surface.y = (this.height - this.surface.height) / 2 + this.y + offsetY;
-  },
-
-  /**
-   * Retrieve the current frame of the surface
-   *
-   * @update surface.frame
-   *
-   * @return {nudefined}
-   */
-  currentSurfaceFrame: function() {
-    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width)
-                         + (this.isAttacking ? this._attackFrame : this._walkFrame);
-  },
-
-  attack: function() {
-    var game = enchant.Core.instance;
-
-    if (!(game.frame % (game.fps / this.fps))) {
-      this._attackFrame++;
-      this._attackFrame %= this.attackFrames;
-      this._attackFrame += this.walkFrames;
-    }
-    else if (this._attackFrame == 5) {
-      this.isAttacking = false;
-    }
   },
 
   /**
