@@ -192,40 +192,37 @@ var Player = enchant.Class.create(Character, {
       if (this.isAttacking) {
         this.attack();
       }
+      else if (this.isMoving) {
+        this.move(map);
+      }
       else if (game.buttons.a.pressed || game.input.a) {
         this.isAttacking = true;
         arguments.callee.call(this);
       }
       else {
         this._attackFrame = 3;
+        this.vx = this.vy = 0;
 
-        if (this.isMoving) {
-          this.move(map);
+        if (game.input.left) {
+          if (this.direction == this.left) this.vx = - this.speed;
+          this.direction = this.left;
         }
-        else {
-          this.vx = this.vy = 0;
-
-          if (game.input.left) {
-            if (this.direction == this.left) this.vx = - this.speed;
-            this.direction = this.left;
-          }
-          else if (game.input.right) {
-            if (this.direction == this.right) this.vx = this.speed;
-            this.direction = this.right;
-          }
-          else if (game.input.up) {
-            if (this.direction == this.up) this.vy = - this.speed;
-            this.direction = this.up;
-          }
-          else if (game.input.down) {
-            if (this.direction == this.down) this.vy = this.speed;
-            this.direction = this.down;
-          }
-          if (this.vx || this.vy) {
-            if (this.canMove(map)) {
-              this.isMoving = true;
-              arguments.callee.call(this);
-            }
+        else if (game.input.right) {
+          if (this.direction == this.right) this.vx = this.speed;
+          this.direction = this.right;
+        }
+        else if (game.input.up) {
+          if (this.direction == this.up) this.vy = - this.speed;
+          this.direction = this.up;
+        }
+        else if (game.input.down) {
+          if (this.direction == this.down) this.vy = this.speed;
+          this.direction = this.down;
+        }
+        if (this.vx || this.vy) {
+          if (this.canMove(map)) {
+            this.isMoving = true;
+            arguments.callee.call(this);
           }
         }
       }
