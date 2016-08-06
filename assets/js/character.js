@@ -63,7 +63,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
 
     this.moveBy(this.vx, this.vy);
 
-    if (!(game.frame % this.walkFrames)) {
+    if (!(game.frame % 3)) {
       this.walk++;
       this.walk %= this.walkFrames;
     }
@@ -101,6 +101,21 @@ var Character = enchant.Class.create(enchant.Sprite, {
    */
   currentSurfaceFrame: function() {
     this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.walk;
+  },
+
+  attack: function() {
+    var game = enchant.Core.instance;
+
+    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this._attackFrame;
+
+    if (!(game.frame % 3)) {
+      this._attackFrame++;
+      this._attackFrame %= this.attackFrames;
+      this._attackFrame += this.walkFrames;
+    }
+    else if (this._attackFrame == 5) {
+      this.isAttacking = false;
+    }
   },
 
   /**
@@ -163,37 +178,40 @@ var Player = enchant.Class.create(Character, {
       this.stickSurface();
       this.currentSurfaceFrame();
 
-      if (this.isMoving) {
-        this.move(map);
-      } else {
-        this.vx = this.vy = 0;
-        if (game.input.left) {
-          if (this.direction == this.left) this.vx = - this.speed;
-          this.direction = this.left;
-        } else if (game.input.right) {
-          if (this.direction == this.right) this.vx = this.speed;
-          this.direction = this.right;
-        } else if (game.input.up) {
-          if (this.direction == this.up) this.vy = - this.speed;
-          this.direction = this.up;
-        } else if (game.input.down) {
-          if (this.direction == this.down) this.vy = this.speed;
-          this.direction = this.down;
-        }
-        if (this.vx || this.vy) {
-          if (this.canMove(map)) {
-            this.isMoving = true;
-            arguments.callee.call(this);
-          }
-        }
+      if (this.isAttacking) {
+        this.attack();
       }
+      else if (game.buttons.a.pressed || game.input.a) {
+        this.isAttacking = true;
+        arguments.callee.call(this);
+      }
+      else {
+        this._attackFrame = 3;
 
-      if (game.buttons.a.pressed || game.input.a) {
-        this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this._attackFrame;
-        if (!(game.frame % this.attackFrames)) {
-          this._attackFrame++;
-          this._attackFrame %= this.attackFrames;
-          this._attackFrame += this.walkFrames;
+        if (this.isMoving) {
+          this.move(map);
+        }
+        else {
+          this.vx = this.vy = 0;
+          if (game.input.left) {
+            if (this.direction == this.left) this.vx = - this.speed;
+            this.direction = this.left;
+          } else if (game.input.right) {
+            if (this.direction == this.right) this.vx = this.speed;
+            this.direction = this.right;
+          } else if (game.input.up) {
+            if (this.direction == this.up) this.vy = - this.speed;
+            this.direction = this.up;
+          } else if (game.input.down) {
+            if (this.direction == this.down) this.vy = this.speed;
+            this.direction = this.down;
+          }
+          if (this.vx || this.vy) {
+            if (this.canMove(map)) {
+              this.isMoving = true;
+              arguments.callee.call(this);
+            }
+          }
         }
       }
 
