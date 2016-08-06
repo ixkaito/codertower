@@ -225,23 +225,31 @@ var Player = enchant.Class.create(Character, {
         }
       }
 
-      /**
-       * Game over
-       */
       for (i = 0; i < enemies.length; i++) {
 
-        if (this.within(enemies[i], 12) && !enemies[i].dead) {
+        /**
+         * Attack detection
+         */
+        if (this.within(enemies[i], 17) && !enemies[i].dead && this.isAttacking) {
 
-          if (game.buttons.a.pressed || game.input.a) {
+          if (
+            (this.direction == 1 && this.x > enemies[i].x) ||
+            (this.direction == 2 && this.x < enemies[i].x) ||
+            (this.direction == 3 && this.y > enemies[i].y) ||
+            (this.direction == 4 && this.y < enemies[i].y)
+          ) {
             enemies[i].dead = true;
             scene.removeChild(enemies[i]);
             scene.removeChild(enemies[i].surface);
           }
-          else {
-            game.over();
-            game.stop();
-          }
+        }
 
+        /**
+         * Game over
+         */
+        if (this.within(enemies[i], 12) && !enemies[i].dead) {
+          game.over();
+          game.stop();
         }
       }
 
