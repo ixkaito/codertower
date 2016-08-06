@@ -6,20 +6,20 @@
 var Character = enchant.Class.create(enchant.Sprite, {
 
   direction: 0,
-  left: 1,
-  right: 2,
-  up: 3,
-  down: 4,
+  left:      1,
+  right:     2,
+  up:        3,
+  down:      4,
 
-  fps: 5,
-  hp: 0,
+  fps:   5,
+  hp:    0,
   speed: 4,
 
-  isAttacking: false,
+  isAttacking:  false,
   _attackFrame: 3,
   attackFrames: 3,
 
-  isMoving: false,
+  isMoving:   false,
   _walkFrame: 1,
   walkFrames: 3,
 
@@ -131,13 +131,17 @@ var Character = enchant.Class.create(enchant.Sprite, {
    */
   randomDirection: function() {
     this.direction = Math.floor(Math.random() * 4 + 1);
+
     if (this.direction == this.left) {
       this.vx = - this.speed;
-    } else if (this.direction == this.right) {
+    }
+    else if (this.direction == this.right) {
       this.vx = this.speed;
-    } else if (this.direction == this.up) {
+    }
+    else if (this.direction == this.up) {
       this.vy = - this.speed;
-    } else if (this.direction == this.down) {
+    }
+    else if (this.direction == this.down) {
       this.vy = this.speed;
     }
   },
@@ -195,16 +199,20 @@ var Player = enchant.Class.create(Character, {
         }
         else {
           this.vx = this.vy = 0;
+
           if (game.input.left) {
             if (this.direction == this.left) this.vx = - this.speed;
             this.direction = this.left;
-          } else if (game.input.right) {
+          }
+          else if (game.input.right) {
             if (this.direction == this.right) this.vx = this.speed;
             this.direction = this.right;
-          } else if (game.input.up) {
+          }
+          else if (game.input.up) {
             if (this.direction == this.up) this.vy = - this.speed;
             this.direction = this.up;
-          } else if (game.input.down) {
+          }
+          else if (game.input.down) {
             if (this.direction == this.down) this.vy = this.speed;
             this.direction = this.down;
           }
@@ -223,11 +231,13 @@ var Player = enchant.Class.create(Character, {
       for (i = 0; i < enemies.length; i++) {
 
         if (this.within(enemies[i], 12) && !enemies[i].dead) {
+
           if (game.buttons.a.pressed || game.input.a) {
             enemies[i].dead = true;
             scene.removeChild(enemies[i]);
             scene.removeChild(enemies[i].surface);
-          } else {
+          }
+          else {
             game.over();
             game.stop();
           }
@@ -286,7 +296,8 @@ var GreenSlime = enchant.Class.create(Enemy, {
 
       if (this.isMoving) {
         this.move(map);
-      } else if (this.delay == 0) {
+      }
+      else if (this.delay == 0) {
         this.delay = this._delay;
         this.vx = this.vy = 0;
         this.randomDirection();
@@ -297,7 +308,8 @@ var GreenSlime = enchant.Class.create(Enemy, {
             arguments.callee.call(this);
           }
         }
-      } else {
+      }
+      else {
         this.delay -= 1;
       }
     });
