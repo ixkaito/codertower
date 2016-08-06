@@ -10,14 +10,16 @@ var Character = enchant.Class.create(enchant.Sprite, {
   right: 2,
   up: 3,
   down: 4,
+
   fps: 5,
+  hp: 0,
+  speed: 4,
 
   isAttacking: false,
   _attackFrame: 3,
   attackFrames: 3,
+
   isMoving: false,
-  hp: 0,
-  speed: 4,
   _walkFrame: 1,
   walkFrames: 3,
 
@@ -101,13 +103,12 @@ var Character = enchant.Class.create(enchant.Sprite, {
    * @return {nudefined}
    */
   currentSurfaceFrame: function() {
-    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this._walkFrame;
+    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width)
+                         + (this.isAttacking ? this._attackFrame : this._walkFrame);
   },
 
   attack: function() {
     var game = enchant.Core.instance;
-
-    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this._attackFrame;
 
     if (!(game.frame % (game.fps / this.fps))) {
       this._attackFrame++;
