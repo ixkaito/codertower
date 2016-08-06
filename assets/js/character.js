@@ -12,7 +12,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
   down: 4,
 
   isAttacking: false,
-  attack: 3,
+  attackFrame: 3,
   attackFrames: 3,
   isMoving: false,
   hp: 0,
@@ -126,15 +126,15 @@ var Character = enchant.Class.create(enchant.Sprite, {
 
     this.isAttacking = true;
 
-    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.attack;
+    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.attackFrame;
 
     if (!(game.frame % this.attackFrames)) {
-      this.attack++;
-      this.attack %= this.attackFrames;
-      this.attack += this.walkFrames;
+      this.attackFrame++;
+      this.attackFrame %= this.attackFrames;
+      this.attackFrame += this.walkFrames;
     } else {
       this.isAttacking = false;
-      this.attack = 3;
+      this.attackFrame = 3;
     }
   },
 
