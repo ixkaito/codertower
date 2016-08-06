@@ -11,8 +11,7 @@ var Character = enchant.Class.create(enchant.Sprite, {
   up: 3,
   down: 4,
 
-  isAttacking: false,
-  attackFrame: 3,
+  attack: 3,
   attackFrames: 3,
   isMoving: false,
   hp: 0,
@@ -104,41 +103,6 @@ var Character = enchant.Class.create(enchant.Sprite, {
   },
 
   /**
-   * Attack
-   */
-  attack: function() {
-    var game = enchant.Core.instance;
-
-    // this.moveBy(this.vx, this.vy);
-
-    // if (!(game.frame % this.walkFrames)) {
-    //   this.walk++;
-    //   this.walk %= this.walkFrames;
-    // }
-
-    // if (
-    //   (this.vx && this.x % map.tileWidth == 0) ||
-    //   (this.vy && this.y % map.tileHeight == 0)
-    // ) {
-    //   this.isMoving = false;
-    //   this.walk = 1;
-    // }
-
-    this.isAttacking = true;
-
-    this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.attackFrame;
-
-    if (!(game.frame % this.attackFrames)) {
-      this.attackFrame++;
-      this.attackFrame %= this.attackFrames;
-      this.attackFrame += this.walkFrames;
-    } else {
-      this.isAttacking = false;
-      this.attackFrame = 3;
-    }
-  },
-
-  /**
    * Set the direction randomly
    *
    * @update direction
@@ -202,9 +166,7 @@ var Player = enchant.Class.create(Character, {
         this.move(map);
       } else {
         this.vx = this.vy = 0;
-        if (game.buttons.a.pressed || game.input.a) {
-          this.attack();
-        } else if (game.input.left) {
+        if (game.input.left) {
           if (this.direction == this.left) this.vx = - this.speed;
           this.direction = this.left;
         } else if (game.input.right) {
@@ -225,6 +187,14 @@ var Player = enchant.Class.create(Character, {
         }
       }
 
+      if (game.buttons.a.pressed || game.input.a) {
+        this.surface.frame = this.direction * (this.surface.image.width / this.surface.width) + this.attack;
+        if (!(game.frame % this.attackFrames)) {
+          this.attack++;
+          this.attack %= this.attackFrames;
+          this.attack += this.walkFrames;
+        }
+      }
 
       /**
        * Game over
