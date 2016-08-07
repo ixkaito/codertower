@@ -11,7 +11,9 @@ window.onload = function() {
     './assets/images/slime-and-witch.png'
   );
 
-  // buttons
+  /**
+   * Buttons
+   */
   game.buttons = {
     a: new Button('A', 'light'),
   };
