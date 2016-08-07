@@ -50,7 +50,7 @@ window.onload = function() {
     game.pushScene(scene);
   };
 
-  game.over = function() {
+  game.pushGameOver = function() {
     var game = enchant.Core.instance;
 
     var scene = new Scene();
@@ -66,7 +66,6 @@ window.onload = function() {
     scene.addChild(text);
 
     game.pushScene(scene);
-    game.stop();
   };
 
   game.onload = function() {
