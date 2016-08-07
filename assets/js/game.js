@@ -13,28 +13,39 @@ window.onload = function() {
   );
 
   /**
-   * Buttons
+   * Add pad method
+   */
+  game.addPad = function() {
+    var pad = new Pad();
+    pad.x = 0;
+    pad.y = 320;
+    this.rootScene.addChild(pad);
+  };
+
+  /**
+   * Add buttons method
    */
   game.addButtons = function() {
-    game.buttons = {
+    this.buttons = {
       a: new Button('A', 'light'),
       start: new Button('START', 'dark'),
     };
-    game.buttons.a.x = 260;
-    game.buttons.a.y = 355;
-    game.buttons.start.x = 145;
-    game.buttons.start.y = 355;
+    this.buttons.a.x = 260;
+    this.buttons.a.y = 355;
+    this.buttons.start.x = 145;
+    this.buttons.start.y = 355;
 
-    game.rootScene.addChild(game.buttons.a);
-    game.rootScene.addChild(game.buttons.start);
-    game.keybind( 'A'.charCodeAt(0), 'a' );
-    game.keybind( 10, 'start' ); // enter key
-    game.keybind( 32, 'start' ); // space key
+    this.rootScene.addChild(this.buttons.a);
+    this.keybind( 'A'.charCodeAt(0), 'a' );
+
+    // this.rootScene.addChild(this.buttons.start);
+    // this.keybind( 10, 'start' ); // enter key
   };
 
-  game.pushOpening = function() {
-    var game = enchant.Core.instance;
-
+  /**
+   * Push opening scene method
+   */
+  game.opening = function() {
     var scene = new Scene();
 
     var overlay = new Sprite(320, 320);
@@ -42,17 +53,22 @@ window.onload = function() {
     scene.addChild(overlay);
 
     var text = new Sprite(236, 48);
-    text.image = game.assets['./assets/images/start.png'];
+    text.image = this.assets['./assets/images/start.png'];
     text.x = (overlay.width - text.width) / 2;
     text.y = (overlay.height - text.height) / 2;
     scene.addChild(text);
 
-    game.pushScene(scene);
+    this.pushScene(scene);
+
+    scene.on('touchstart', function() {
+      game.popScene();
+    });
   };
 
-  game.pushGameOver = function() {
-    var game = enchant.Core.instance;
-
+  /**
+   * Push game over scene method
+   */
+  game.gameover = function() {
     var scene = new Scene();
 
     var overlay = new Sprite(320, 320);
@@ -60,16 +76,25 @@ window.onload = function() {
     scene.addChild(overlay);
 
     var text = new Sprite(189, 97);
-    text.image = game.assets['./assets/images/gameover.png'];
+    text.image = this.assets['./assets/images/gameover.png'];
     text.x = (overlay.width - text.width) / 2;
     text.y = (overlay.height - text.height) / 2;
     scene.addChild(text);
 
-    game.pushScene(scene);
+    this.pushScene(scene);
   };
 
   game.onload = function() {
-    game.pushOpening();
+    /**
+     * Add game pad and buttons
+     */
+    game.addPad();
+    game.addButtons();
+
+    /**
+     * Add opening scene
+     */
+    game.opening();
 
     /**
      * Stage 1
@@ -89,20 +114,6 @@ window.onload = function() {
     var player1 = new Player(stage1, map1, 9, 9, enemies1);
 
     game.rootScene.addChild(stage1);
-
-    /**
-     * Add game pad
-     */
-    var pad = new Pad();
-    pad.x = 0;
-    pad.y = 320;
-    game.rootScene.addChild(pad);
-
-    /**
-     * Add game buttons
-     */
-    game.addButtons();
-
   };
 
   game.start();

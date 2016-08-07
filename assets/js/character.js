@@ -250,7 +250,7 @@ var Player = enchant.Class.create(Character, {
          * Game over
          */
         if (this.within(enemies[i], 12) && !enemies[i].dead) {
-          game.pushGameOver();
+          game.gameover();
           game.stop();
         }
       }
