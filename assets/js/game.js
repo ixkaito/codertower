@@ -36,6 +36,7 @@ window.onload = function() {
     scene.addChild(text);
 
     game.pushScene(scene);
+    game.stop();
   },
 
   game.onload = function() {
