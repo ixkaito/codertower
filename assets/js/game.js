@@ -5,6 +5,7 @@ window.onload = function() {
   var game = new Core(320, 420);
   game.fps = 15;
   game.preload(
+    './assets/images/start.png',
     './assets/images/gameover.png',
     './assets/images/map.png',
     './assets/images/knight.png',
@@ -31,6 +32,24 @@ window.onload = function() {
     game.keybind( 32, 'start' ); // space key
   };
 
+  game.pushOpening = function() {
+    var game = enchant.Core.instance;
+
+    var scene = new Scene();
+
+    var overlay = new Sprite(320, 320);
+    overlay.backgroundColor = 'rgba(255, 255, 255, 1)';
+    scene.addChild(overlay);
+
+    var text = new Sprite(236, 48);
+    text.image = game.assets['./assets/images/start.png'];
+    text.x = (overlay.width - text.width) / 2;
+    text.y = (overlay.height - text.height) / 2;
+    scene.addChild(text);
+
+    game.pushScene(scene);
+  };
+
   game.over = function() {
     var game = enchant.Core.instance;
 
@@ -51,6 +70,7 @@ window.onload = function() {
   };
 
   game.onload = function() {
+    game.pushOpening();
 
     /**
      * Stage 1
