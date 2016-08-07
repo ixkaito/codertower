@@ -14,11 +14,22 @@ window.onload = function() {
   /**
    * Buttons
    */
-  game.buttons = {
-    a: new Button('A', 'light'),
+  game.addButtons = function() {
+    game.buttons = {
+      a: new Button('A', 'light'),
+      start: new Button('START', 'dark'),
+    };
+    game.buttons.a.x = 260;
+    game.buttons.a.y = 355;
+    game.buttons.start.x = 145;
+    game.buttons.start.y = 355;
+
+    game.rootScene.addChild(game.buttons.a);
+    game.rootScene.addChild(game.buttons.start);
+    game.keybind( 'A'.charCodeAt(0), 'a' );
+    game.keybind( 10, 'start' ); // enter key
+    game.keybind( 32, 'start' ); // space key
   };
-  game.buttons.a.x = 260;
-  game.buttons.a.y = 355;
 
   game.over = function() {
     var game = enchant.Core.instance;
@@ -26,7 +37,7 @@ window.onload = function() {
     var scene = new Scene();
 
     var overlay = new Sprite(320, 320);
-    overlay.backgroundColor = 'rgba(0, 0, 0, 0.5';
+    overlay.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     scene.addChild(overlay);
 
     var text = new Sprite(189, 97);
@@ -37,7 +48,7 @@ window.onload = function() {
 
     game.pushScene(scene);
     game.stop();
-  },
+  };
 
   game.onload = function() {
 
@@ -71,8 +82,7 @@ window.onload = function() {
     /**
      * Add game buttons
      */
-    game.rootScene.addChild(game.buttons.a);
-    game.keybind( 'A'.charCodeAt(0), 'a' );
+    game.addButtons();
 
   };
 
