@@ -94,7 +94,7 @@ window.onload = function() {
     /**
      * Add opening scene
      */
-    // game.opening();
+    game.opening();
 
     /**
      * Stage 1
